@@ -2,6 +2,7 @@ package com.cristianml.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
@@ -12,7 +13,7 @@ import org.springframework.lang.NonNull;
 @Builder
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class CategoryModel {
 
     @Id
@@ -20,6 +21,7 @@ public class CategoryModel {
     private Integer id;
 
     @NotEmpty(message = "Can't be empty.")
+    @Column(length = 50)
     private String name;
 
     // This slug is for validating duplicated registers in DB.
