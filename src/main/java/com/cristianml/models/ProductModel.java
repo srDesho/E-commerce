@@ -34,4 +34,8 @@ public class ProductModel {
     private int stock;
     private Double discount;
     private Boolean isActive;
+
+    @ManyToOne(targetEntity = CategoryModel.class)
+    @JoinColumn(name = "id_category")
+    private CategoryModel category;
 }

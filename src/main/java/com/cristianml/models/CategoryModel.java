@@ -7,6 +7,9 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,5 +29,8 @@ public class CategoryModel {
 
     // This slug is for validating duplicated registers in DB.
     private String slug;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "category")
+    private List<ProductModel> productList = new ArrayList<>();
 
 }
