@@ -7,11 +7,11 @@
 </head>
 <body>
 
-<div>
-    <header th:insert="/layout/frontend :: header"></header>
-</div>
 
 <section>
+    <div>
+        <header th:replace="/layout/frontend :: main-header"></header>
+    </div>
     <!-- Start Slider  -->
 
     <div id="carouselExample" class="carousel slide" style="margin-top: 50px;" data-bs-ride="carousel" data-bs-interval="9000">
