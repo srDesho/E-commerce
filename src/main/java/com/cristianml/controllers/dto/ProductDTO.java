@@ -1,13 +1,13 @@
-package com.cristianml.models;
+package com.cristianml.controllers.dto;
 
-
-import jakarta.persistence.*;
+import com.cristianml.models.CategoryModel;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 import java.math.BigDecimal;
 
@@ -16,19 +16,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 
-@Entity
-@Table(name = "products")
-public class ProductModel {
+public class ProductDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotEmpty(message = "is empty.")
     private String name;
     private String slug;
     @NotEmpty(message = "is empty.")
     private String description;
-    @Column(nullable = false)
     @NotNull(message = "Can't be null.")
     private BigDecimal price;
     private String image;
@@ -37,8 +32,6 @@ public class ProductModel {
     private int discount;
     private BigDecimal discountPrice;
     private Boolean isActive;
-
-    @ManyToOne(targetEntity = CategoryModel.class)
-    @JoinColumn(name = "id_category")
     private CategoryModel category;
+
 }

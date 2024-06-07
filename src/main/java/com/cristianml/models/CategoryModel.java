@@ -1,8 +1,8 @@
 package com.cristianml.models;
 
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
