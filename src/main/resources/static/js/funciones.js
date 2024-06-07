@@ -84,13 +84,23 @@
          }
      });
  }
- function soloNumeros(evt) {
-     key = (document.all) ? evt.keyCode : evt.which;
-     //alert(key);
-     if (key == 17) return false;
-     /* digitos,del, sup,tab,arrows*/
-     return ((key >= 48 && key <= 57) || key == 8 || key == 127 || key == 9 || key == 0);
- }
+function soloNumeros(evt) {
+    var key = evt.keyCode || evt.which;
+    if (key == 17) return false; // Tecla de control (Ctrl)
+    return (key >= 48 && key <= 57) || key == 8 || key == 127 || key == 9 || key == 0; // Permitir números, teclas de control y retroceso
+}
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    var priceInput = document.getElementById("price");
+    if (priceInput) {
+        priceInput.addEventListener("keypress", function(evt) {
+            if (!soloNumeros(evt)) {
+                evt.preventDefault(); // Evitar que se ingresen caracteres no permitidos
+            }
+        });
+    }
+});
+
  window.onload = function() {
      muestraReloj();
 
