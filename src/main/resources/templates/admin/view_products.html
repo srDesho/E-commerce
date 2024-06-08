@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div>
+    <header th:insert="/layout/frontend :: admin-header"></header>
+</div>
+
+<section>
+    <section>
+        <div class="container-fluid mt-5 p-5">
+
+            <div class="card card-sh">
+
+                <div class="card-header text-center">
+                    <p class="fs-4">View Products</p>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Product name</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Discount</th>
+                            <th scope="col">Discount Price</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product:${products}">
+                            <td th:text="${product.id}"></td>
+                            <td style="text-align: center;">
+                                <a th:href="${baseUrlUpload}+'producto/'+${product.image}" class="fancybox">
+                                    <img th:src="${baseUrlUpload}+'producto/'+${product.image}" width="70" height="70"/>
+                                </a>
+                            </td>
+                            <td th:text="${product.name}"></td>
+                            <td th:text="${product.stock}"></td>
+                            <!-- <td>
+                                <a th:href="@{/jpa-repository/productos/categorias/}+${product.category.id}" th:title="${product.category.name}" th:text="${product.category.name}"></a>
+                            </td>  -->
+                            <td th:text="${product.category.name}"></td>
+
+                            <td th:text="'$'+${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'POINT')}"></td>
+                            <td th:text="${product.discount}+'%'"></td>
+                            <td th:text="${product.discountPrice}"></td>
+                            <td>
+                                <a th:href="@{/ecommerce/admin/product/edit/}+${product.id}"><i class="fas fa-edit"></i></a>
+                                <!-- Show delete alert if you are sure-->
+                                <a href="javascript:void(0);" th:onclick="'eliminar(\'/ecommerce/admin/product/delete/'+ ${product.id} +'\')'" >
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                                <a th:href="@{'/admin/editProduct/'+${p.id}}" class="btn btn-sm btn-primary"><i
+                                        class="fa-solid fa-pen-to-square"></i>Discount</a>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</section>
+
+<div th:insert="/layout/frontend::scripts"></div>
+</body>
+</html>

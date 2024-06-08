@@ -26,7 +26,7 @@ public class AdminController {
     @Value("${cristian.values.path_upload}")
     private String path_upload; // This name must be same name of path variable from Configuration class
 
-    @Value("cristian.values.base_url_upload")
+    @Value("${cristian.values.base_url_upload}")
     private String baseUrlUpload;
 
     @Autowired
@@ -38,6 +38,13 @@ public class AdminController {
     @GetMapping("/home")
     public String home() {
         return "/admin/index";
+    }
+
+    // View products
+    @GetMapping("/product/view")
+    public String viewProducts(Model model) {
+        model.addAttribute("products", this.productService.listProducts());
+        return "/admin/view_products";
     }
 
     // Add Product

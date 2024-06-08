@@ -26,8 +26,14 @@ public class ProductModel {
     @NotEmpty(message = "is empty.")
     private String name;
     private String slug;
+
+    // @Lob indicates that the field should be persisted as a large object in the database.
+    // @Column(columnDefinition = "TEXT") specifies that the column should be of type TEXT in the database.
+    @Lob
+    @Column(columnDefinition = "TEXT")
     @NotEmpty(message = "is empty.")
     private String description;
+
     @Column(nullable = false)
     @NotNull(message = "Can't be null.")
     private BigDecimal price;
