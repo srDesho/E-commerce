@@ -1,6 +1,8 @@
 package com.cristianml.controllers;
 
+import com.cristianml.controllers.dto.CategoryDTO;
 import com.cristianml.controllers.dto.ProductDTO;
+import com.cristianml.models.CategoryModel;
 import com.cristianml.models.ProductModel;
 import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IProductService;
@@ -50,6 +52,79 @@ public class AdminController {
         return "/admin/view_categories";
     }
 
+    @GetMapping("/category/add")
+    public String addCategory(CategoryDTO categoryDTO, Model model){
+        model.addAttribute("category", categoryDTO);
+        return "/admin/add_category";
+    }
+
+    @PostMapping("/category/add")
+    public String addCategoryPost(@Valid CategoryDTO categoryDTO, BindingResult result, @RequestParam("imageFile") MultipartFile file
+        , RedirectAttributes flash, Model model) {
+
+        // Validate data
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors()
+                    .forEach( err -> {
+                        errors.put(err.getField(),
+                                "The field ".concat(err.getField()).concat(" ").concat(err.getDefaultMessage()));
+                    });
+
+            model.addAttribute("errors", errors);
+            model.addAttribute("category", categoryDTO);
+            return "/admin/add_product";
+        }
+
+        // Validate image file
+        if (file.isEmpty()) {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "The file for the image is mandatory, it must be JPG|JPEG|PNG");
+            model.addAttribute("category", categoryDTO);
+            return "redirect:/ecommerce/admin/category/add";
+        }
+
+        if (!file.isEmpty()) {
+            String imageName = Utilities.saveFile(file, this.path_upload+"producto/");
+
+            // Validate mime type
+            if (imageName == "no") {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "The image file is not valid, it must be JPG|JPEG|PNG");
+                model.addAttribute("category", categoryDTO);
+                return "redirect:/ecommerce/admin/category/add";
+            }
+
+            if (imageName != null) {
+                categoryDTO.setImage(imageName);
+            }
+        }
+
+        // Generate slug
+        String slug = Utilities.getSlug(categoryDTO.getName());
+
+        // Check duplicate name
+
+        if (this.categoryService.existsBySlug(slug)) {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "This category name already exists in the database");
+            model.addAttribute("category", categoryDTO);
+            return "redirect:/ecommerce/admin/category/add";
+        }
+
+        // Convert DTO to Entity
+        CategoryModel category = new CategoryModel();
+        category.setName(categoryDTO.getName());
+        category.setSlug(slug);
+        category.setImage(categoryDTO.getImage());
+        this.categoryService.save(category);
+
+        flash.addFlashAttribute("clas", "success");
+        flash.addFlashAttribute("message", "Category created successfully.");
+        model.addAttribute("category", categoryDTO);
+        return "redirect:/ecommerce/admin/category/add";
+    }
+
     // ========================================== PRODUCTS =========================================
     // VIEW PRODUCTS
     @GetMapping("/product/view")
@@ -69,7 +144,7 @@ public class AdminController {
     public String addProductPost(@Valid ProductDTO productDTO, BindingResult result, @RequestParam("imageFile") MultipartFile file
             , RedirectAttributes flash, Model model) {
 
-        // Validate datas
+        // Validate data
         if(result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             result.getFieldErrors()
@@ -148,7 +223,7 @@ public class AdminController {
     public String deleteProductPost(@Valid ProductDTO productDTO, BindingResult result, @RequestParam("imageFile") MultipartFile file
         , RedirectAttributes flash, Model model, @PathVariable("id") Integer id) {
 
-        // Validate datas
+        // Validate data
         if(result.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             result.getFieldErrors()

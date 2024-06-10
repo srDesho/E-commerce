@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div>
+    <header th:insert="/layout/frontend :: admin-header"></header>
+</div>
+
+<section>
+    <div class="container p-5 mt-3">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card card-sh">
+                    <div class="card-header text-center ">
+                        <p class="fs-4">Add Category</p>
+                    </div>
+
+                    <div th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+                        <span th:text="${message}"></span>
+                        <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="card-body">
+                        <form name="form" method="post" th:object="${category}" th:action="@{/ecommerce/admin/category/add}"
+                              enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label>Name</label>
+                                <input type="text" th:field="*{name}" id="name" class="form-control">
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('name')}"
+                                     th:text="${errors.name}"></div>
+                            </div>
+
+                            <div class="mb-3 col">
+                                <label>Upload Image</label>
+                                <input type="file" name="imageFile" id="imageFile" class="form-control" />
+                            </div>
+
+                            <a href="javascript:void(0);" class="btn btn-primary col-md-12" onclick="document.form.submit();">Save</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="/layout/frontend::scripts"></div>
+</body>
+</html>
