@@ -76,14 +76,14 @@
          inputs[i].checked = false;
      }
  }
-  function eliminar(ruta)
- {
-	 jCustomConfirm('¿Realmente desea eliminar este registro?', 'Tienda', 'Aceptar', 'Cancelar', function(r) {
-         if (r) {
-             window.location = ruta;
-         }
-     });
- }
+function deleteRecord(ruta) {
+    jCustomConfirm('Are you sure of delete this record?', 'Store', 'Accept', 'Cancel', function(r){
+        if (r) {
+            window.location = ruta;
+        }
+    });
+}
+
 function soloNumeros(evt) {
     var key = evt.keyCode || evt.which;
     if (key == 17) return false; // Tecla de control (Ctrl)

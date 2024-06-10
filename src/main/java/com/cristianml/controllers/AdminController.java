@@ -205,7 +205,32 @@ public class AdminController {
     }
 
     // DELETE PRODUCT
-    
+
+    @GetMapping("/product/delete/{id}")
+    public String deleteProduct(@PathVariable("id") Integer id, RedirectAttributes flash) {
+
+        Optional<ProductModel> optionalProduct = this.productService.findById(id);
+        if (optionalProduct.isPresent()) {
+            ProductModel productModel = optionalProduct.get();
+            // Get the image
+            File objImage = new File(this.path_upload+"producto/"+productModel.getImage());
+
+            // Delete the image
+            if (objImage.delete()) {
+                this.productService.deleteById(id);
+                flash.addFlashAttribute("clas", "success");
+                flash.addFlashAttribute("message", "Product  deleted succesfully.");
+            } else {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "Product could not be removed try again later");
+            }
+        } else {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "Product could not be removed try again later");
+        }
+
+        return "redirect:/ecommerce/admin/product/view"; // This line of code cannot have any spaces.
+    }
 
     // GENERICS
     @ModelAttribute

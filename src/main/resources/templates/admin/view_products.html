@@ -19,6 +19,11 @@
                     <p class="fs-4">View Products</p>
                 </div>
 
+                <div th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+                    <span th:text="${message}"></span>
+                    <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
                 <div class="card-body">
                     <table class="table table-bordered">
                         <thead>
@@ -51,14 +56,14 @@
 
                             <td th:text="'$'+${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'POINT')}"></td>
                             <td th:text="${product.discount}+'%'"></td>
-                            <td th:text="${product.discountPrice}"></td>
+                            <td th:text="'$'+${#numbers.formatDecimal(product.discountPrice, 0, 'POINT', 0, 'POINT')}"></td>
                             <td>
                                 <a th:href="@{/ecommerce/admin/product/edit/}+${product.id}"><i class="fas fa-edit"></i></a>
                                 <!-- Show delete alert if you are sure-->
-                                <a href="javascript:void(0);" th:onclick="'eliminar(\'/ecommerce/admin/product/delete/'+ ${product.id} +'\')'" >
+                                <a href="javascript:void(0);" th:onclick="'deleteRecord(\'/ecommerce/admin/product/delete/' + ${product.id} + '\')'">
                                     <i class="fas fa-trash"></i>
                                 </a>
-                                <a th:href="@{'/admin/editProduct/'+${p.id}}" class="btn btn-sm btn-primary"><i
+                                <a th:href="@{'ecommerce/admin/product/add_discount/'+${product.id}}" class="btn btn-sm btn-primary"><i
                                         class="fa-solid fa-pen-to-square"></i>Discount</a>
                             </td>
 
