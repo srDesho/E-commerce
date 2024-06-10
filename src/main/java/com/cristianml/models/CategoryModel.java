@@ -29,7 +29,7 @@ public class CategoryModel {
 
     // This slug is for validating duplicated registers in DB.
     private String slug;
-
+    private String image;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "category")
     private List<ProductModel> productList = new ArrayList<>();
 

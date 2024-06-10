@@ -43,6 +43,14 @@ public class AdminController {
         return "/admin/index";
     }
 
+    // ========================================== CATEGORIES =======================================
+
+    @GetMapping("/category/view")
+    public String viewCategories() {
+        return "/admin/view_categories";
+    }
+
+    // ========================================== PRODUCTS =========================================
     // VIEW PRODUCTS
     @GetMapping("/product/view")
     public String viewProducts(Model model) {
