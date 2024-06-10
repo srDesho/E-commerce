@@ -1,7 +1,10 @@
 package com.cristianml.service;
 
+import com.cristianml.controllers.dto.ProductDTO;
 import com.cristianml.models.ProductModel;
+import org.springframework.validation.BindingResult;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,5 +19,7 @@ public interface IProductService {
 
     // Check if exists relation with a category
     boolean checkRelationWithCategory(Integer idCategory);
+
+    BigDecimal calculateDiscountPrice(BigDecimal price, BigDecimal discount);
 
 }
