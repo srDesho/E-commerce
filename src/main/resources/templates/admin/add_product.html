@@ -42,9 +42,11 @@
 
                             <div class="mb-3">
                                 <label>Category</label>
-                                <select class="form-control" th:field="*{category}" id="category">
-                                <option th:each="c:${categories}" th:value="${c.id}" th:text="${c.name}"></option>
-                            </select>
+                                <select class="form-control" id="category" name="category">
+                                    <option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.name}"
+                                            th:selected="${product.category != null && product.category.id == c.id}">
+                                    </option>
+                                </select>
                             </div>
 
                             <div class="mb-3">
