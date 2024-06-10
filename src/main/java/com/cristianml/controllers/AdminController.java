@@ -16,8 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.io.File;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/ecommerce/admin")
@@ -40,14 +43,14 @@ public class AdminController {
         return "/admin/index";
     }
 
-    // View products
+    // VIEW PRODUCTS
     @GetMapping("/product/view")
     public String viewProducts(Model model) {
         model.addAttribute("products", this.productService.listProducts());
         return "/admin/view_products";
     }
 
-    // Add Product
+    // ADD PRODUCT
     @GetMapping("/product/add")
     public String addProduct(ProductDTO product, Model model) {
         model.addAttribute("product", product);
@@ -94,11 +97,6 @@ public class AdminController {
 
             if (imageName != null) {
                 productDTO.setImage(imageName);
-            } else {
-                flash.addFlashAttribute("clas", "danger");
-                flash.addFlashAttribute("message", "The image file is NULL");
-                model.addAttribute("product", productDTO);
-                return "redirect:/ecommerce/admin/product/add";
             }
         }
 
@@ -115,7 +113,7 @@ public class AdminController {
         product.setStock(productDTO.getStock());
         product.setCategory(productDTO.getCategory());
         product.setIsActive(true);
-        product.setDiscount(0);
+        product.setDiscount(BigDecimal.valueOf(0));
         product.setDiscountPrice(product.getPrice());
         this.productService.save(product);
 
@@ -124,8 +122,92 @@ public class AdminController {
         return "redirect:/ecommerce/admin/product/add";
     }
 
+    // EDIT PRODUCT
 
-    // Generics
+    @GetMapping("/product/edit/{id}")
+    public String deleteProduct(@PathVariable("id") Integer id, Model model){
+        Optional<ProductModel> optionalProduct = this.productService.findById(id);
+        if (optionalProduct.isEmpty()) {
+            System.out.println("NOT FOUND IN DB");
+        }
+        ProductModel product = optionalProduct.get();
+        // product.setCategory(product.getCategory());
+        model.addAttribute("product", product);
+        return "/admin/edit_product";
+    }
+
+    @PostMapping("/product/edit/{id}")
+    public String deleteProductPost(@Valid ProductDTO productDTO, BindingResult result, @RequestParam("imageFile") MultipartFile file
+        , RedirectAttributes flash, Model model, @PathVariable("id") Integer id) {
+
+        // Validate datas
+        if(result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors()
+                    .forEach( err -> {
+                        errors.put(err.getField(),
+                                "The field ".concat(err.getField()).concat(" ").concat(err.getDefaultMessage()));
+                    });
+
+            model.addAttribute("errors", errors);
+            model.addAttribute("product", productDTO);
+            return "/admin/edit_product";
+        }
+
+        if (!file.isEmpty()) {
+            String imageName = Utilities.saveFile(file, this.path_upload+"producto/");
+
+            if (imageName == "no") {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "The image file is not valid, it must be JPG|JPEG|PNG");
+                model.addAttribute("product", productDTO);
+                return "redirect:/ecommerce/admin/product/edit/" + id;
+            }
+
+            if (imageName != null) {
+                productDTO.setImage(imageName);
+            } else {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "The image file is NULL");
+                model.addAttribute("product", productDTO);
+                return "redirect:/ecommerce/admin/product/edit/" + id;
+            }
+        }
+
+        Optional<ProductModel> optionalProduct = this.productService.findById(id);
+        if (optionalProduct.isEmpty()) {
+            System.out.println("NOT FOUND IN DB");
+        }
+
+        // Convert DTO to Product entity
+        ProductModel productModel = optionalProduct.get();
+        productModel.setName(productDTO.getName());
+        productModel.setSlug(Utilities.getSlug(productDTO.getName()));
+        productModel.setDescription(productDTO.getDescription());
+        productModel.setPrice(productDTO.getPrice());
+        productModel.setImage(productDTO.getImage());
+        productModel.setStock(productDTO.getStock());
+        productModel.setCategory(productDTO.getCategory());
+
+        // Discount
+        productModel.setDiscount(productDTO.getDiscount());
+
+        BigDecimal discountPrice = (BigDecimal) this.productService.calculateDiscountPrice(productDTO.getPrice()
+            , productDTO.getDiscount());
+        productModel.setDiscountPrice(discountPrice);
+
+        this.productService.save(productModel);
+
+        flash.addFlashAttribute("clas", "success");
+        flash.addFlashAttribute("message", "Product update successfully.");
+        return "redirect:/ecommerce/admin/product/edit/" + id;
+
+    }
+
+    // DELETE PRODUCT
+    
+
+    // GENERICS
     @ModelAttribute
     public void setGenerics(Model model) {
         model.addAttribute("categories", this.categoryService.listCategories());

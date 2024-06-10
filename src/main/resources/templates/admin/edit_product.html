@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div>
+    <header th:insert="/layout/frontend :: admin-header"></header>
+</div>
+
+<section>
+    <div class="container p-5 mt-3">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card card-sh">
+                    <div class="card-header text-center ">
+                        <p class="fs-4">Edit Product</p>
+                    </div>
+
+                    <div th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+                        <span th:text="${message}"></span>
+                        <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="card-body">
+                        <form name="form" method="post" th:object="${product}" th:action="@{/ecommerce/admin/product/edit/}+${product.id}"
+                              enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label>Name</label>
+                                <input type="text" th:field="*{name}" id="name" class="form-control">
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('name')}"
+                                     th:text="${errors.name}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Description</label>
+                                <textarea rows="3" cols="" class="form-control" th:field="*{description}" id="description"></textarea>
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('description')}"
+                                     th:text="${errors.description}"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category">Category</label>
+                                <select class="form-control" id="category" name="category">
+                                    <option th:each="c : ${categories}"
+                                            th:value="${c.id}"
+                                            th:text="${c.name}"
+                                            th:selected="${product.category != null and product.category.id == c.id}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label>Price</label>
+                                <input type="text" th:field="*{price}" id="price" class="form-control">
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('price')}"
+                                     th:text="${errors.price}"></div>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="mb-3 col">
+                                    <label>Discount</label>
+                                    <input type="number" th:field="*{discount}" class="form-control" min="0" step="1">
+                                </div>
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('discount')}"
+                                     th:text="${errors.discount}"></div>
+
+                                <div class="mb-3 col">
+                                    <label>Discount Price</label>
+                                    <input type="number" th:field="*{discountPrice}" readonly class="form-control" min="0" step="1">
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="mb-3 col">
+                                    <label>Stock</label>
+                                    <input type="number" th:field="*{stock}" class="form-control" min="0" step="1">
+                                </div>
+
+                                <div class="mb-3 col">
+                                    <label>Upload Image</label>
+                                    <input type="file" name="imageFile" id="imageFile" class="form-control" />
+                                </div>
+
+                                <div class="mt-1">
+                                    <img th:src="${baseUrlUpload}+'producto/'+${product.image}" width="70" height="70"/>
+                                </div>
+
+                                <!-- We must include this line to pass the photo and prevent Spring from encountering errors when editing the photo -->
+                                <input type="hidden" th:field="*{image}" value="image" />
+                            </div>
+
+
+                            <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('stock')}"
+                                 th:text="${errors.stock}"></div>
+
+                            <a href="javascript:void(0);" class="btn btn-primary col-md-12" onclick="document.form.submit();">Save</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:insert="/layout/frontend::scripts"></div>
+</body>
+</html>

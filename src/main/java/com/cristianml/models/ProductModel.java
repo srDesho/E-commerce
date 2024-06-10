@@ -40,7 +40,8 @@ public class ProductModel {
     private String image;
     @NotNull(message = "can't be null")
     private Integer stock;
-    private int discount;
+
+    private BigDecimal discount;
     private BigDecimal discountPrice;
     private Boolean isActive;
 
