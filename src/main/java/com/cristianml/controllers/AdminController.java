@@ -198,21 +198,32 @@ public class AdminController {
         Optional<CategoryModel> optionalCategory = this.categoryService.findById(id);
         if (optionalCategory.isPresent()) {
             CategoryModel categoryModel = optionalCategory.get();
+
+            // Check if Category have relation with prdoucts
+            if (this.productService.checkRelationWithCategory(id)) {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "This category could not be removed because it has related products.");
+                return "redirect:/ecommerce/admin/category/view";
+            }
+
             // Get the image
             File objImage = new File(this.path_upload+"producto/"+categoryModel.getImage());
 
             // Delete the image
             if (objImage.delete()) {
+
+                // Check if Category have relation with prdoucts
+
                 this.categoryService.deleteById(id);
                 flash.addFlashAttribute("clas", "success");
                 flash.addFlashAttribute("message", "Category deleted successfully.");
             } else {
                 flash.addFlashAttribute("clas", "danger");
-                flash.addFlashAttribute("message", "Category could not be removed try again later.");
+                flash.addFlashAttribute("message", "Category could not be removed, try again later.");
             }
         } else {
             flash.addFlashAttribute("clas", "danger");
-            flash.addFlashAttribute("message", "Category could not be removed try again later.");
+            flash.addFlashAttribute("message", "Category could not be removed, try again later.");
         }
 
         return "redirect:/ecommerce/admin/category/view"; // This line of code cannot have any spaces.
