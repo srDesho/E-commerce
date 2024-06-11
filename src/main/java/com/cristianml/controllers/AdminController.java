@@ -193,6 +193,30 @@ public class AdminController {
 
     // DELETE CATEGORIE
 
+    @GetMapping("/category/delete/{id}")
+    public String deleteCategory(@PathVariable("id") Integer id, RedirectAttributes flash) {
+        Optional<CategoryModel> optionalCategory = this.categoryService.findById(id);
+        if (optionalCategory.isPresent()) {
+            CategoryModel categoryModel = optionalCategory.get();
+            // Get the image
+            File objImage = new File(this.path_upload+"producto/"+categoryModel.getImage());
+
+            // Delete the image
+            if (objImage.delete()) {
+                this.categoryService.deleteById(id);
+                flash.addFlashAttribute("clas", "success");
+                flash.addFlashAttribute("message", "Category deleted successfully.");
+            } else {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "Category could not be removed try again later.");
+            }
+        } else {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "Category could not be removed try again later.");
+        }
+
+        return "redirect:/ecommerce/admin/category/view"; // This line of code cannot have any spaces.
+    }
 
     // ========================================== PRODUCTS =========================================
     // VIEW PRODUCTS
