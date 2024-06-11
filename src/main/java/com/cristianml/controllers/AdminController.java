@@ -46,12 +46,13 @@ public class AdminController {
     }
 
     // ========================================== CATEGORIES =======================================
-
+    // VIEW CATEGORIES
     @GetMapping("/category/view")
     public String viewCategories() {
         return "/admin/view_categories";
     }
 
+    // ADD CATEGORY
     @GetMapping("/category/add")
     public String addCategory(CategoryDTO categoryDTO, Model model){
         model.addAttribute("category", categoryDTO);
@@ -73,7 +74,7 @@ public class AdminController {
 
             model.addAttribute("errors", errors);
             model.addAttribute("category", categoryDTO);
-            return "/admin/add_product";
+            return "/admin/add_category";
         }
 
         // Validate image file
@@ -124,6 +125,74 @@ public class AdminController {
         model.addAttribute("category", categoryDTO);
         return "redirect:/ecommerce/admin/category/add";
     }
+
+    // EDIT CATEGORY
+    @GetMapping("/category/edit/{id}")
+    public String editCategory(@PathVariable("id") Integer id, Model model){
+        Optional<CategoryModel> optionalCategory = this.categoryService.findById(id);
+        if (optionalCategory.isEmpty()) {
+            System.out.println("NOT FOUND IN DB");
+        }
+        model.addAttribute("category", optionalCategory.get());
+        return "/admin/edit_category";
+    }
+
+    @PostMapping("/category/edit/{id}")
+    public String editCategoryPost(@Valid CategoryDTO categoryDTO, BindingResult result, @RequestParam("imageFile") MultipartFile file
+            , RedirectAttributes flash, @PathVariable("id") Integer id, Model model) {
+
+        // Validate data
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors()
+                    .forEach( err -> {
+                        errors.put(err.getField(),
+                                "The field ".concat(err.getField()).concat(" ").concat(err.getDefaultMessage()));
+                    });
+
+            model.addAttribute("errors", errors);
+            model.addAttribute("category", categoryDTO);
+            return "/admin/edit_category";
+        }
+
+        if (!file.isEmpty()) {
+            String imageName = Utilities.saveFile(file, this.path_upload+"producto/");
+
+            // Validate mime type
+            if (imageName == "no") {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "The image file is not valid, it must be JPG|JPEG|PNG");
+                model.addAttribute("category", categoryDTO);
+                return "redirect:/ecommerce/admin/category/edit/" + id;
+            }
+
+            if (imageName != null) {
+                categoryDTO.setImage(imageName);
+            }
+        }
+
+        // Generate slug
+        String slug = Utilities.getSlug(categoryDTO.getName());
+
+        // Convert DTO to Entity
+        Optional<CategoryModel> optionalCategory = this.categoryService.findById(id);
+        if (optionalCategory.isEmpty()) {
+            System.out.println("NOT FOUND IN DB");
+        }
+        CategoryModel category = optionalCategory.get();
+        category.setName(categoryDTO.getName());
+        category.setSlug(slug);
+        category.setImage(categoryDTO.getImage());
+        this.categoryService.save(category);
+
+        flash.addFlashAttribute("clas", "success");
+        flash.addFlashAttribute("message", "Category created successfully.");
+        model.addAttribute("category", categoryDTO);
+        return "redirect:/ecommerce/admin/category/edit/" + id;
+    }
+
+    // DELETE CATEGORIE
+
 
     // ========================================== PRODUCTS =========================================
     // VIEW PRODUCTS
