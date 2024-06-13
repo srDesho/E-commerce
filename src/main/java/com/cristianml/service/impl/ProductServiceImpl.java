@@ -61,4 +61,18 @@ public class ProductServiceImpl implements IProductService {
         return discountPrice;
     }
 
+    @Override
+    public List<ProductModel> getAllActiveProducts() {
+        return this.productDAO.getAllActiveProducts();
+    }
+
+    @Override
+    public List<ProductModel> getActiveProductsByCategory(String category) {
+        if (category.isBlank()) {
+            return this.productDAO.getAllActiveProducts();
+        }
+        return this.productDAO.getActiveProductsByCategory(category);
+    }
+
+
 }

@@ -16,4 +16,5 @@ public interface ICategoryService {
 
     boolean existsBySlug(String slug);
 
+    List<CategoryModel> getActiveCategories(Boolean isActive);
 }

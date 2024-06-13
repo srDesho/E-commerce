@@ -46,4 +46,9 @@ public class CategoryDAOImpl implements ICategoryDAO {
             return true;
         }
     }
+
+    @Override
+    public List<CategoryModel> getActiveCategories(Boolean isActive) {
+        return this.categoryRepository.findAllCategoryModelByIsActive(isActive);
+    }
 }

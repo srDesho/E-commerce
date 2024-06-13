@@ -16,4 +16,6 @@ public interface ICategoryDAO {
 
     boolean existsBySlug(String slug);
 
+    List<CategoryModel> getActiveCategories(Boolean isActive);
+
 }

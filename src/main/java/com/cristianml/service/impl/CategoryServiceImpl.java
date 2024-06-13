@@ -54,6 +54,11 @@ public class CategoryServiceImpl implements ICategoryService {
         return true;
     }
 
+    @Override
+    public List<CategoryModel> getActiveCategories(Boolean isActive) {
+        return this.categoryDAO.getActiveCategories(isActive);
+    }
+
     /*
     // This is the correct implementation of the existsBySlug method
     @Override

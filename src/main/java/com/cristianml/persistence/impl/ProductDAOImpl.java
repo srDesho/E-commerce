@@ -45,4 +45,15 @@ public class ProductDAOImpl implements IProductDAO {
         }
         return false;
     }
+
+    @Override
+    public List<ProductModel> getAllActiveProducts() {
+        return this.productRepository.findAllProductModelByIsActiveTrue();
+    }
+
+    @Override
+    public List<ProductModel> getActiveProductsByCategory(String category) {
+        return this.productRepository.findAllActiveProductsByCategoryName(category);
+    }
+
 }

@@ -118,6 +118,7 @@ public class AdminController {
         category.setName(categoryDTO.getName());
         category.setSlug(slug);
         category.setImage(categoryDTO.getImage());
+        category.setIsActive(true);
         this.categoryService.save(category);
 
         flash.addFlashAttribute("clas", "success");
@@ -216,14 +217,14 @@ public class AdminController {
 
                 this.categoryService.deleteById(id);
                 flash.addFlashAttribute("clas", "success");
-                flash.addFlashAttribute("message", "Category deleted successfully.");
+                flash.addFlashAttribute("message", "This category deleted successfully.");
             } else {
                 flash.addFlashAttribute("clas", "danger");
-                flash.addFlashAttribute("message", "Category could not be removed, try again later.");
+                flash.addFlashAttribute("message", "This category could not be removed, try again later.");
             }
         } else {
             flash.addFlashAttribute("clas", "danger");
-            flash.addFlashAttribute("message", "Category could not be removed, try again later.");
+            flash.addFlashAttribute("message", "This category could not be removed, try again later.");
         }
 
         return "redirect:/ecommerce/admin/category/view"; // This line of code cannot have any spaces.

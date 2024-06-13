@@ -23,6 +23,7 @@ public class CategoryDTO {
     // This slug is for validating duplicated registers in DB.
     private String slug;
     private String image;
+    private Boolean isActive;
     private List<ProductModel> productList = new ArrayList<>();
 
 }

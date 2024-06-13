@@ -17,4 +17,10 @@ public interface IProductDAO {
     // Check if exists relation with a category
     boolean checkRelationWithCategory(Integer idCategory);
 
+    // Get all active products
+    List<ProductModel> getAllActiveProducts();
+
+    // Get active products by category
+    List<ProductModel> getActiveProductsByCategory(String category);
+
 }
