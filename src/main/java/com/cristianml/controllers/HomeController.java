@@ -1,15 +1,15 @@
 package com.cristianml.controllers;
 
+import com.cristianml.models.ProductModel;
 import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/ecommerce")
@@ -27,6 +27,18 @@ public class HomeController {
     @GetMapping("/home")
     public String home() {
         return "/index";
+    }
+
+    // SEE PRODUCT DETAILS
+    @GetMapping("/product/{id}")
+    public String viewProductDetails(@PathVariable("id") Integer id, Model model) {
+        Optional<ProductModel> optionalProduct = this.productService.findById(id);
+        if (optionalProduct.isPresent()) {
+           ProductModel product = optionalProduct.get();
+           model.addAttribute("product", product);
+        }
+
+        return "/view_product";
     }
 
     // VIEW PRODUCTS
