@@ -29,6 +29,12 @@ public class HomeController {
         return "/index";
     }
 
+    // LOGIN
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
+
     // SEE PRODUCT DETAILS
     @GetMapping("/product/{id}")
     public String viewProductDetails(@PathVariable("id") Integer id, Model model) {
