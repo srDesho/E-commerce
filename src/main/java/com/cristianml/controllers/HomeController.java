@@ -35,6 +35,12 @@ public class HomeController {
         return "/login";
     }
 
+    // LOGIN
+    @GetMapping("/register")
+    public String register() {
+        return "/register";
+    }
+
     // SEE PRODUCT DETAILS
     @GetMapping("/product/{id}")
     public String viewProductDetails(@PathVariable("id") Integer id, Model model) {
