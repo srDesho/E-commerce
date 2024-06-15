@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+<section>
+    <div th:replace="/layout/frontend :: main-header"></div>
+
+    <div class="container mt-5 p-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 mt-3 p-5">
+                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+                    <div class="card-header text-center">
+                        <p class="fs-4">Admin Login</p>
+                        <div th:if="${param.error}" class="alert alert-danger">
+                            Invalid email & Password
+                        </div>
+
+                        <div th:if="${param.logout}" class="alert alert-success">
+                            Logout Successfully
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/ecommerce/login}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input class="form-control" name="username" type="email">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input class="form-control" name="password" type="password">
+                            </div>
+                            <button type="submit" class="btn bg-primary text-white col-md-12">Login</button>
+                        </form>
+                    </div>
+
+                    <div class="card-footer text-center">
+                        <a href="#" class="text-decoration-none">Forgot Password</a><br>
+                        Don't have an account? <a href="#" class="text-decoration-none">Create one</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<div th:insert="/layout/frontend :: scripts"></div>
+</body>
+</html>

@@ -31,7 +31,10 @@ public class HomeController {
 
     // LOGIN
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(value = "type", required = false) String type) {
+        if (type.equalsIgnoreCase("admin")) {
+            return "/admin/admin_login";
+        }
         return "/login";
     }
 
