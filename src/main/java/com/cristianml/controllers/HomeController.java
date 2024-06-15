@@ -65,6 +65,7 @@ public class HomeController {
     // GENERICS
     @ModelAttribute
     public void setGenerics(Model model){
+        model.addAttribute("categories", this.categoryService.getActiveCategories(true));
         model.addAttribute("baseUrlUpload", this.baseUrlUpload);
     }
 }
