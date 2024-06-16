@@ -23,4 +23,5 @@ public class PermissionModel {
     @Column(unique = true, nullable = false, updatable = false)
     private String name;
 
+
 }
