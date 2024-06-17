@@ -26,13 +26,13 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/home}"><i class="fa-solid fa-house"></i> Home</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/products}">Product</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/customer/home}"><i class="fa-solid fa-house"></i> Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/customer/products}">Product</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Category</a>
                             <ul class="dropdown-menu">
                                 <li><a th:each="c:${categories}"
-                                       th:href="@{'/ecommerce/products?category='+${c.name}}"
+                                       th:href="@{'/ecommerce/customer/products?category='+${c.name}}"
                                        th:classappend="${paramValue == c.name} ? 'active':''"
                                        class="dropdown-item"
                                        th:text="${c.name}"></a></li>
@@ -41,9 +41,9 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/login(type='user')}"><i class="fa-solid fa-right-to-bracket"></i> LOGIN</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/register}">REGISTER</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/login(type='admin')}">ADMIN</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/customer/login(type='user')}"><i class="fa-solid fa-right-to-bracket"></i> LOGIN</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/customer/register}">REGISTER</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/ecommerce/customer/login(type='admin')}">ADMIN</a></li>
                     </ul>
                 </div>
             </div>

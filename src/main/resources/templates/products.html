@@ -37,11 +37,11 @@
                     <div class="card-body">
                         <div class="list-group">
                             <p class="fs-5">Category</p>
-                            <a th:href="@{/ecommerce/products}"
+                            <a th:href="@{/ecommerce/customer/products}"
                                th:classappend="${paramValue==''} ? 'active':''"
                                class="list-group-item list-group-item-action"
                                aria-current="true"> All </a> <a th:each="c:${categories}"
-                                                                th:href="@{'/ecommerce/products?category='+${c.name}}"
+                                                                th:href="@{'/ecommerce/customer/products?category='+${c.name}}"
                                                                 th:classappend="${paramValue == c.name} ? 'active':''"
                                                                 class="list-group-item list-group-item-action"
                                                                 th:text="${c.name}"></a>
@@ -69,7 +69,7 @@
 															[[${p.price}]]</span> <span class="fs-6 text-success">[[${p.discount}]]%
 															off </span>
                                                 </p>
-                                                <a th:href="@{'/ecommerce/product/'+${p.id}}"
+                                                <a th:href="@{'/ecommerce/customer/product/'+${p.id}}"
                                                    class="btn btn-primary col-md-6 offset-md-3">View
                                                     Details</a>
                                             </div>

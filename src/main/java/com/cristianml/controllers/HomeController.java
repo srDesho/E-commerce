@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/ecommerce")
+@RequestMapping("/ecommerce/customer")
 public class HomeController {
 
     @Autowired
