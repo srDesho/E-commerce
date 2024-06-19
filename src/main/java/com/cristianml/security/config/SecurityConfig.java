@@ -20,6 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
+    @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.securityMatcher("/ecommerce/customer/**") // This is for redirect to specific login
                 .authorizeHttpRequests( http -> {
@@ -35,7 +36,24 @@ public class SecurityConfig {
                 .build();
     }
 
+    @Bean
+    @Order(2)
+    public SecurityFilterChain securityFilterChain2(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity.securityMatcher("/ecommerce/admin/**")
+                .authorizeHttpRequests( http -> {
+                    http.requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/img/**", "/webjars/**").permitAll();
+                    http.requestMatchers("/ecommerce/admin/**").hasRole("ADMIN");
+                    http.anyRequest().authenticated();
 
+                })
+                .formLogin(form -> form
+                        .loginPage("/ecommerce/admin/login")
+                        .loginProcessingUrl("/ecommerce/admin/login") // URL donde se procesa el login
+                        .defaultSuccessUrl("/ecommerce/admin/home", true)
+                        .permitAll()
+                )
+                .build();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

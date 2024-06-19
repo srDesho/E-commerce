@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +44,37 @@ public class AdminController {
     @GetMapping("/home")
     public String home() {
         return "/admin/index";
+    }
+
+    @GetMapping("/login")
+    public String adminLogin(@RequestParam(value = "error", required = false) String error,
+                             @RequestParam(value = "logout", required = false) String logout,
+                             RedirectAttributes flash,
+                             Principal principal,
+                             Model model) {
+
+        // Verificar si hay un usuario logeado
+        if (principal != null) {
+            flash.addFlashAttribute("clas", "success");
+            flash.addFlashAttribute("message", "Ya ha iniciado sesión anteriormente.");
+            return "redirect:/ecommerce/admin/home";
+        }
+
+        // Manejar el logout
+        if (logout != null) {
+            flash.addFlashAttribute("clas", "success");
+            flash.addFlashAttribute("message", "Ha cerrado sesión exitosamente.");
+            return "redirect:/ecommerce/admin/login";
+        }
+
+        // Si se recibe error, mostrar mensaje de error
+        if (error != null) {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "Los datos ingresados no son correctos, por favor inténtelo de nuevo.");
+            return "redirect:/ecommerce/admin/login";
+        }
+
+        return "/admin/admin_login"; // Renderizar la vista de login de administrador
     }
 
     // ========================================== CATEGORIES =======================================

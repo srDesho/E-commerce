@@ -11,6 +11,12 @@
         <div class="row justify-content-center">
             <div class="col-md-6 mt-3 p-5">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+
+                    <div th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+                        <span th:text="${message}"></span>
+                        <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
                     <div class="card-header text-center">
                         <p class="fs-4">Admin Login</p>
                         <div th:if="${param.error}" class="alert alert-danger">
@@ -22,17 +28,20 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/ecommerce/login}" method="post">
+                        <form name="form" th:action="@{/ecommerce/admin/login}" method="POST">
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
-                                <input class="form-control" name="username" type="email">
+                                <label for="username" class="form-label">Email</label>
+                                <input class="form-control" name="username" id="username" type="text" placeholder="E-mail"
+                                       required="true" autofocus="true">
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <input class="form-control" name="password" type="password">
+                                <label for="password" class="form-label">Password</label>
+                                <input class="form-control" name="password" id="password" type="password" placeholder="Password"
+                                       required="true">
                             </div>
-                            <button type="submit" class="btn bg-primary text-white col-md-12">Login</button>
+                            <button type="submit"
+                                    class="btn bg-primary text-white col-md-12">Login</button>
                         </form>
                     </div>
 
