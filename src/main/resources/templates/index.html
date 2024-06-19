@@ -12,6 +12,12 @@
     <div>
         <header th:replace="/layout/frontend :: main-header"></header>
     </div>
+
+    <div th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+        <span th:text="${message}"></span>
+        <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
     <!-- Start Slider  -->
 
     <div id="carouselExample" class="carousel slide" style="margin-top: 50px;" data-bs-ride="carousel" data-bs-interval="9000">
