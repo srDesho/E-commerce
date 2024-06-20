@@ -53,28 +53,28 @@ public class AdminController {
                              Principal principal,
                              Model model) {
 
-        // Verificar si hay un usuario logeado
+        // Check if there is a logged-in user
         if (principal != null) {
             flash.addFlashAttribute("clas", "success");
-            flash.addFlashAttribute("message", "Ya ha iniciado sesión anteriormente.");
+            flash.addFlashAttribute("message", "You have already logged in before.");
             return "redirect:/ecommerce/admin/home";
         }
 
-        // Manejar el logout
+        // Handle logout
         if (logout != null) {
             flash.addFlashAttribute("clas", "success");
-            flash.addFlashAttribute("message", "Ha cerrado sesión exitosamente.");
+            flash.addFlashAttribute("message", "You have successfully logged out.");
             return "redirect:/ecommerce/admin/login";
         }
 
-        // Si se recibe error, mostrar mensaje de error
+        // If an error is received, display an error message
         if (error != null) {
             flash.addFlashAttribute("clas", "danger");
-            flash.addFlashAttribute("message", "Los datos ingresados no son correctos, por favor inténtelo de nuevo.");
+            flash.addFlashAttribute("message", "The entered data is incorrect, please try again.");
             return "redirect:/ecommerce/admin/login";
         }
 
-        return "/admin/admin_login"; // Renderizar la vista de login de administrador
+        return "/admin/admin_login"; // Render the admin login view
     }
 
     // ========================================== CATEGORIES =======================================

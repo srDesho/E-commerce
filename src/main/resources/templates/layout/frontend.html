@@ -89,12 +89,18 @@
                                 <span sec:authentication="name"></span> <!-- Muestra el nombre de usuario -->
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);"
+                                       onclick="document.getElementById('logoutForm').submit();">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
             </div>
+
+            <!-- Logout form -->
+            <form id="logoutForm" th:action="@{/ecommerce/customer/logout}" method="post" style="display: none;">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            </form>
         </nav>
     </header>
 </div>
@@ -122,10 +128,11 @@
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                aria-expanded="false">Admin</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0);" onclick="document.logout_form.submit();">Logout</a></li>
                             </ul>
                         </li>
                     </ul>
+                    <form name="logout_form" th:action="@{/ecommerce/admin/logout}" method="post"></form>
                 </div>
             </div>
         </nav>

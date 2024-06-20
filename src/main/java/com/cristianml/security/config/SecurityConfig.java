@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -31,7 +33,12 @@ public class SecurityConfig {
                 })
                 .formLogin(form -> form
                         .loginPage("/ecommerce/customer/login")
+                        .defaultSuccessUrl("/ecommerce/customer/home", true)
                         .permitAll()
+                ).logout(logout -> logout
+                                // this path changes according to the method .securityMatcher("/ecommerce/customer/**")
+                                .logoutUrl("/ecommerce/customer/logout")
+                                .permitAll()
                 )
                 .build();
     }
@@ -50,6 +57,10 @@ public class SecurityConfig {
                         .loginPage("/ecommerce/admin/login")
                         .loginProcessingUrl("/ecommerce/admin/login") // URL donde se procesa el login
                         .defaultSuccessUrl("/ecommerce/admin/home", true)
+                        .permitAll()
+                ).logout(logout -> logout
+                        // this path changes according to the method .securityMatcher("/ecommerce/admin/**")
+                        .logoutUrl("/ecommerce/admin/logout")
                         .permitAll()
                 )
                 .build();
