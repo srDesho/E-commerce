@@ -23,7 +23,6 @@ public class CartModel {
     private UserModel user;
 
     @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cart_items")
     private List<CartItemModel> cartItems;
 
 }
