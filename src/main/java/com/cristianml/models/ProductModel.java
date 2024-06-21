@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -46,4 +48,10 @@ public class ProductModel {
     @ManyToOne(targetEntity = CategoryModel.class)
     @JoinColumn(name = "id_category")
     private CategoryModel category;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartItemModel> cartItem = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<OrderItemModel> orderItem = new ArrayList<>();
 }
