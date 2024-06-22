@@ -28,4 +28,9 @@ public class CartItemModel {
 
     private int quantity;
 
+    public CartItemModel(CartModel cart, ProductModel product, int quantity) {
+        this.cart = cart;
+        this.product = product;
+        this.quantity = quantity;
+    }
 }
