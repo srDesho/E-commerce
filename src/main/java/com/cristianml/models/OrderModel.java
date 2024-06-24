@@ -2,16 +2,17 @@ package com.cristianml.models;
 
 import com.cristianml.security.model.UserModel;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = {"orderItems"})
+@ToString(exclude = {"orderItems"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -35,7 +36,7 @@ public class OrderModel {
     @JoinColumn(name = "user_id", nullable = false)
     private UserModel user;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItemModel> orderItems;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItemModel> orderItems = new ArrayList<>();
 
 }

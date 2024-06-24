@@ -64,7 +64,7 @@
 
                 </div>
                 <div class="col-md-4">
-                    <form>
+                    <form name="form" th:method="POST" th:action="@{/ecommerce/customer/cart/checkout}">
                         <div class="container mt-4">
                             <div class="card">
                                 <div class="card-body">
@@ -82,11 +82,11 @@
                             <div class="card">
                                 <h3>Payment</h3>
                                 <div class="mb-3">
-                                    <label for="paymentMode" class="form-label">Payment Mode</label>
+                                    <label class="form-label">Payment Mode</label>
                                     <select class="form-select" id="paymentMode" name="paymentMode" required>
-                                        <option value="Credit Card">Credit Card</option>
-                                        <option value="PayPal">PayPal</option>
-                                        <option value="Cash on Delivery">Cash on Delivery</option>
+                                        <option>Credit Card</option>
+                                        <option>PayPal</option>
+                                        <option>Cash on Delivery</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Checkout</button>

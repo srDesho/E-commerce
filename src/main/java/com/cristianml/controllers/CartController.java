@@ -61,6 +61,20 @@ public class CartController {
         return "redirect:/ecommerce/customer/cart/view";
     }
 
+    // Checkout
+    @PostMapping("/checkout")
+    public String checkout(Model model) {
+        model.addAttribute("totalAmount", this.cartService.calculateTotalPrice(cartService.getCartByCurrentUser()));
+        return "/card-payment";
+    }
+
+    // CompleteOrder
+    @PostMapping("/complete-order")
+    public String completeOrder() {
+        this.cartService.checkout();
+        return "redirect:/ecommerce/customer/cart/view";
+    }
+
     // Generics
     @ModelAttribute
     public void setGenerics(Model model) {
