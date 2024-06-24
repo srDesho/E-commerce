@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+<section>
+    <div th:replace="/layout/frontend :: main-header"></div>
+
+    <div class="container card-sh" style="margin-top: 70px; margin-bottom: 100px">
+        <div class="col-md-12 p-5">
+            <div class="row">
+                <div class="container">
+                    <h2>My Orders</h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Order Date</th>
+                            <th>Order ID</th>
+                            <th>Quantity</th>
+                            <th>Total Price</th>
+                            <th>Payment Type</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.orderDate}">Order Date</td>
+                            <td th:text="${order.orderId}">Order ID</td>
+                            <td th:text="${order.orderItems.size()}">Quantity</td>
+                            <td th:text="${order.totalAmount}">Total Price</td>
+                            <td th:text="${order.paymentMethod}">Payment Type</td>
+                            <td th:text="${order.status}">Status</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div th:insert="/layout/frontend::scripts"></div>
+</body>
+</html>
