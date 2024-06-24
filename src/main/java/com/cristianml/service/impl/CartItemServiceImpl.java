@@ -20,4 +20,9 @@ public class CartItemServiceImpl implements ICartItemService {
     public Optional<CartItemModel> findCartItemModelById(Long id) {
         return this.cartItemDAO.findCartItemModelById(id);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        this.cartItemDAO.deleteById(id);
+    }
 }

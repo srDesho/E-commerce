@@ -20,4 +20,9 @@ public class CartItemDAOImpl implements ICartItemDAO {
     public Optional<CartItemModel> findCartItemModelById(Long id) {
         return this.cartItemRepository.findById(id);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        this.cartItemRepository.deleteById(id);
+    }
 }

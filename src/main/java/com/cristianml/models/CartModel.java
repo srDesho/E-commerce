@@ -4,6 +4,7 @@ import com.cristianml.security.model.UserModel;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -19,10 +20,15 @@ public class CartModel {
     private Long id;
 
     @OneToOne()
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItemModel> cartItems;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItemModel> cartItems = new ArrayList<>();
 
+    // Method to add a CartItem to the cart and set the relationship
+    public void addCartItem(CartItemModel cartItem) {
+        cartItems.add(cartItem);
+        cartItem.setCart(this);
+    }
 }

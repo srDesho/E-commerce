@@ -8,4 +8,6 @@ public interface ICartItemService {
 
     Optional<CartItemModel> findCartItemModelById(Long id);
 
+    void deleteById(Long id);
+
 }

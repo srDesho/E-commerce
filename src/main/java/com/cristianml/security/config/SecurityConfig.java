@@ -24,7 +24,7 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.securityMatcher("/ecommerce/customer/**") // This is for redirect to specific login
+        return httpSecurity.securityMatcher("/ecommerce/customer/**")// This is for redirect to specific login
                 .authorizeHttpRequests( http -> {
                     http.requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/img/**", "/webjars/**").permitAll();
                     http.requestMatchers("/ecommerce/customer/**").permitAll();

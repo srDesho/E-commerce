@@ -8,9 +8,11 @@ import com.cristianml.persistence.ICartItemDAO;
 import com.cristianml.persistence.IProductDAO;
 import com.cristianml.security.model.UserModel;
 import com.cristianml.service.ICartService;
-import com.cristianml.service.IOrderService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,7 +65,13 @@ public class CartServiceImpl implements ICartService {
         CartItemModel item = cart.getCartItems().stream()
                 .filter(i -> i.getProduct().getId().equals(productId))
                 .findFirst()
-                .orElseGet(() -> new CartItemModel(cart, product, 0));
+                .orElseGet(() -> {
+                    // Create new Item if not exists
+                    CartItemModel newItem = new CartItemModel(cart, product, 0);
+                    // Add to cat
+                    cart.addCartItem(newItem);
+                    return newItem;
+                });
 
         // Update the quantity of the cart item
         item.setQuantity(item.getQuantity() + quantity);
@@ -73,16 +81,27 @@ public class CartServiceImpl implements ICartService {
     }
 
     // Method to update the cart
-    public void updateCart(Long itemId, int quantity) {
+    public void updateCart(Long itemId, String operation) {
+        CartModel cart = getCartByCurrentUser();
         // Find the CartItemModel by itemId. If not found, throw a RuntimeException
         CartItemModel cartItem = cartItemDAO.findCartItemModelById(itemId)
                 .orElseThrow(() -> new RuntimeException("Item not found."));
 
+        int quantity = cartItem.getQuantity();
+        if (operation.equals("sum")) {
+            quantity += 1;
+        } else {
+            quantity -= 1;
+        }
+
         // Update the quantity of the found CartItemModel
         cartItem.setQuantity(quantity);
-
         // Save the updated cart associated with the CartItemModel
         cartDAO.save(cartItem.getCart());
+
+        if (cartItem.getQuantity() == 0) {
+            this.cartItemDAO.deleteById(itemId);
+        }
     }
 
     // Method to check out the buy
@@ -108,5 +127,15 @@ public class CartServiceImpl implements ICartService {
         return cartDAO.save(userCart);
     }
 
+    // Calculate total price
+    public BigDecimal calculateTotalPrice(CartModel cart) {
+        if (cart.getCartItems() != null) {
+            BigDecimal totalAmount = cart.getCartItems().stream()
+                    .map(item -> item.getProduct().getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            return totalAmount;
+        }
+        return BigDecimal.valueOf(0);
+    }
 
 }

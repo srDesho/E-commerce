@@ -8,4 +8,5 @@ public interface ICartItemDAO {
 
     Optional<CartItemModel> findCartItemModelById(Long id);
 
+    void deleteById(Long id);
 }

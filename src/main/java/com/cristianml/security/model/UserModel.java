@@ -64,5 +64,5 @@ public class UserModel {
     private CartModel cart;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartModel> orderList = new ArrayList<>();
+    private List<OrderModel> orderList = new ArrayList<>();
 }

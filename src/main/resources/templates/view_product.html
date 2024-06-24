@@ -50,7 +50,10 @@
                     </div>
 
                     <th:block th:if="${product.stock > 0}">
-                        <a href="login.html" class="btn btn-danger col-md-12">Add To Cart</a>
+                        <form th:action="@{/ecommerce/customer/cart/add/{productId}/{quantity}(productId=${product.id}, quantity=1)}" method="post">
+                            <!-- Send button-->
+                            <button type="submit" class="btn btn-danger col-md-12">Agregar al carrito</button>
+                        </form>
                     </th:block>
 
                     <th:block th:unless="${product.stock > 0}">
@@ -61,5 +64,6 @@
         </div>
     </div>
 </section>
+<div th:insert="/layout/frontend::scripts"></div>
 </body>
 </html>
