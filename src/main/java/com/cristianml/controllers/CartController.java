@@ -54,7 +54,12 @@ public class CartController {
         return "redirect:/ecommerce/customer/cart/view";
     }
 
-
+    // Update cart
+    @PostMapping("/update/{itemId}")
+    public String update(@PathVariable("itemId") Long itemId, @RequestParam(value = "operation") String operation) {
+        this.cartService.updateCart(itemId, operation);
+        return "redirect:/ecommerce/customer/cart/view";
+    }
 
     // Generics
     @ModelAttribute

@@ -37,7 +37,19 @@
                             <td th:text="${item.product.name}">Product Name</td>
                             <td th:text="'$'+${#numbers.formatDecimal(item.product.discountPrice, 0, 'POINT', 0, 'POINT')}"></td>
                             <td>
-                                
+                                <div class="input-group">
+                                    <form th:action="@{/ecommerce/customer/cart/update/{itemId}(itemId=${item.id}, operation='subtract')}" method="post">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                    </form>
+                                    <input type="number" th:value="${item.quantity}" readonly class="form-control text-center">
+                                    <form th:action="@{/ecommerce/customer/cart/update/{itemId}(itemId=${item.id}, operation='sum')}" method="post">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                             <td th:text="'$'+${#numbers.formatDecimal(item.quantity * item.product.discountPrice, 0, 'POINT', 0, 'POINT')}">Total</td>
                             <td>
