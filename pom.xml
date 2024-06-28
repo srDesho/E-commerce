@@ -123,7 +123,7 @@
 						<configuration>
 							<excludes>
 								<exclude>**/ECommerceApplication.class</exclude>
-								<exclude>**/entity/**/*.class</exclude>
+								<exclude>**/models/**/*.class</exclude>
 								<exclude>**/controllers/**/*.class</exclude>
 							</excludes>
 						</configuration>
