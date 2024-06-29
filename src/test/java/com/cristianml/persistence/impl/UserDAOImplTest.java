@@ -1,5 +1,6 @@
 package com.cristianml.persistence.impl;
 
+
 import com.cristianml.dataProvider.UserDataProvider;
 import com.cristianml.security.model.UserModel;
 import com.cristianml.security.repository.UserRepository;
@@ -31,7 +32,7 @@ public class UserDAOImplTest {
     @Test
     public void testFindAll() {
         // When
-        when(this.userDAO.findAll()).thenReturn(UserDataProvider.userListMock());
+        when(this.userRepository.findAll()).thenReturn(UserDataProvider.userListMock());
         List<UserModel> result = this.userDAO.findAll();
 
         // Then

@@ -52,7 +52,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     // Method to get the username of the current user
-    private String getCurrentUsername() {
+    public String getCurrentUsername() {
         // The Principal object stores the authenticated user's details
         // SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // This method return the object Principal
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
