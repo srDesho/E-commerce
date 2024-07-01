@@ -135,6 +135,5 @@ public class ProductDAOImplTest {
         for (ProductModel product : result) {
             assertTrue(product.getIsActive());
         }
-
     }
 }
