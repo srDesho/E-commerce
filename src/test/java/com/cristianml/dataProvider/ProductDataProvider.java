@@ -69,6 +69,7 @@ public class ProductDataProvider {
                         .image("product1.png")
                         .stock(10)
                         .discount(BigDecimal.valueOf(10))
+                        .discountPrice(BigDecimal.valueOf(490))
                         .isActive(true)
                         .category(new CategoryModel())
                         .cartItem(new ArrayList<>())

@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -193,5 +194,165 @@ public class CartServiceImplTest {
 
         // Verify that cartDAO.save(any(CartModel.class)) was never invoked
         verify(this.cartDAO, never()).save(any(CartModel.class));
+    }
+
+    // updateCart method
+    @Test
+    public void testUpdateCart_IncrementQuantity() {
+        Long itemId = 1L;
+        String operation = "sum";
+        UserModel user = UserDataProvider.optionalUserMock().get();
+        CartModel cart = CartDataProvider.optionalCartMock().get();
+        CartItemModel existingItem = CartItemModel.builder()
+                .cart(cart)
+                .product(ProductDataProvider.productMock().get())
+                .quantity(2)
+                .build();
+
+        // Mock the method getCurrentUser in userService to return mock user
+        when(this.userService.getCurrentUser()).thenReturn(user);
+
+        // Mock the method findCartByUser in cartDAO class to return mock
+        when(this.cartDAO.findCartByUser(any(UserModel.class))).thenReturn(Optional.of(cart));
+
+        // Mock the method findCartItemModelById in cartServiceImpl to return existsProduct
+        when(this.cartItemDAO.findCartItemModelById(anyLong())).thenReturn(Optional.of(existingItem));
+
+        // Call the method under test
+        this.cartService.updateCart(itemId, operation);
+
+        // Verify the quantity is incremented
+        assertEquals(3, existingItem.getQuantity());
+
+        // Verify the save method is called on cartDAO with the update cart
+        verify(this.cartDAO).save(cart);
+
+        // Verify deleteByIde is not called in cartItemDAO
+        verify(this.cartItemDAO, never()).deleteById(itemId);
+    }
+
+    @Test
+    public void testUpdateCart_DecrementQuantity() {
+        Long itemId = 1L;
+        String operation = "substract";
+        UserModel user = UserDataProvider.optionalUserMock().get();
+        CartModel cart = CartDataProvider.optionalCartMock().get();
+        CartItemModel existingItem = CartItemModel.builder()
+                .cart(cart)
+                .product(ProductDataProvider.productMock().get())
+                .quantity(2)
+                .build();
+
+        // Mock the method getCurrentUser in userService to return mock user
+        when(this.userService.getCurrentUser()).thenReturn(user);
+
+        // Mock the method findCartByUser in cartDAO class to return mock
+        when(this.cartDAO.findCartByUser(any(UserModel.class))).thenReturn(Optional.of(cart));
+
+        // Mock the method findCartItemModelById in cartServiceImpl to return existsProduct
+        when(this.cartItemDAO.findCartItemModelById(anyLong())).thenReturn(Optional.of(existingItem));
+
+        // Call the method under test
+        this.cartService.updateCart(itemId, operation);
+
+        // Verify the quantity is incremented
+        assertEquals(1, existingItem.getQuantity());
+
+        // Verify the save method is called on cartDAO with the update cart
+        verify(this.cartDAO).save(cart);
+
+        // Verify deleteByIde is not called in cartItemDAO
+        verify(this.cartItemDAO, never()).deleteById(itemId);
+    }
+
+    @Test
+    public void testUpdateCart_DecrementQuantityToZero() {
+        Long itemId = 1L;
+        String operation = "substract";
+        UserModel user = UserDataProvider.optionalUserMock().get();
+        CartModel cart = CartDataProvider.optionalCartMock().get();
+        CartItemModel existingItem = CartItemModel.builder()
+                .cart(cart)
+                .product(ProductDataProvider.productMock().get())
+                .quantity(1)
+                .build();
+
+        // Mock the method getCurrentUser in userService to return mock user
+        when(this.userService.getCurrentUser()).thenReturn(user);
+
+        // Mock the method findCartByUser in cartDAO class to return mock
+        when(this.cartDAO.findCartByUser(any(UserModel.class))).thenReturn(Optional.of(cart));
+
+        // Mock the method findCartItemModelById in cartServiceImpl to return existsProduct
+        when(this.cartItemDAO.findCartItemModelById(anyLong())).thenReturn(Optional.of(existingItem));
+
+        // Call the method under test
+        this.cartService.updateCart(itemId, operation);
+
+        // Verify the quantity is incremented
+        assertEquals(0, existingItem.getQuantity());
+
+        // Verify the save method is called on cartDAO with the update cart
+        verify(this.cartDAO).save(cart);
+
+        // Verify deleteByIde is not called in cartItemDAO
+        verify(this.cartItemDAO).deleteById(itemId);
+    }
+
+    @Test
+    public void testUpdateCart_ItemNotFound() {
+        Long itemId = 1L;
+        String operation = "sum";
+        UserModel user = UserDataProvider.optionalUserMock().get();
+        CartModel cart = CartDataProvider.optionalCartMock().get();
+
+        // Mock the method getCurrentUser in userService to return mock user
+        when(this.userService.getCurrentUser()).thenReturn(user);
+
+        // Mock the method findCartByUser in cartDAO class to return mock cart
+        when(this.cartDAO.findCartByUser(any(UserModel.class))).thenReturn(Optional.of(cart));
+
+        // Mock the method findCartItemModelById in cartItemDAO to return empty
+        when(this.cartItemDAO.findCartItemModelById(anyLong())).thenReturn(Optional.empty());
+
+        // Assert that the RuntimeException is thrown when the item is not found
+        assertThrows(RuntimeException.class, () -> {
+           cartService.updateCart(itemId, operation);
+        });
+
+        // Verify that save method en cardDAO is never called
+        verify(this.cartDAO, never()).save(cart);
+    }
+
+    // checkout method
+    @Test
+    public void testCheckout() {
+        CartModel cart = CartDataProvider.optionalCartMock().get();
+        UserModel user = UserDataProvider.optionalUserMock().get();
+
+        when(this.userService.getCurrentUser()).thenReturn(user);
+        when(this.cartDAO.findCartByUser(any(UserModel.class))).thenReturn(Optional.of(cart));
+        this.cartService.checkout();
+
+        verify(orderService).createOrderFromCart(cart); // Verify order is created from cart
+        assertTrue(cart.getCartItems().isEmpty());
+        verify(cartDAO).save(cart);
+    }
+
+    // calculateTotalPrice method
+    @Test
+    public void testCalculateTotalPrice_NotNullItems() {
+        CartModel cart = CartDataProvider.optionalCartMockWithItems().get();
+
+        BigDecimal result = this.cartService.calculateTotalPrice(cart);
+        assertEquals(BigDecimal.valueOf(980), result);
+    }
+
+    @Test
+    public void testCalculateTotalPrice_NullItems() {
+        CartModel cart = CartDataProvider.optionalCartNullItemsMock().get();
+
+        BigDecimal result = this.cartService.calculateTotalPrice(cart);
+        assertEquals(BigDecimal.valueOf(0), result);
     }
 }
