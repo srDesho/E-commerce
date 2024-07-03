@@ -25,4 +25,9 @@ public class CartItemDAOImpl implements ICartItemDAO {
     public void deleteById(Long id) {
         this.cartItemRepository.deleteById(id);
     }
+
+    @Override
+    public void save(CartItemModel any) {
+        this.cartItemRepository.save(any);
+    }
 }

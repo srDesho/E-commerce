@@ -120,7 +120,7 @@ public class CartServiceImpl implements ICartService {
     }
 
     // Create cart if user does not have.
-    private CartModel createCartUser(UserModel currentUser) {
+    public CartModel createCartUser(UserModel currentUser) {
 
         CartModel userCart = new CartModel();
         userCart.setUser(currentUser);
