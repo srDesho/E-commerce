@@ -2,10 +2,8 @@ package com.cristianml.dataProvider;
 
 import com.cristianml.models.CartItemModel;
 import com.cristianml.models.CartModel;
-import com.cristianml.security.model.UserModel;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
