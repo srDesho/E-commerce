@@ -1,10 +1,8 @@
 package com.cristianml.service.impl;
 
 import com.cristianml.dataProvider.ProductDataProvider;
-import com.cristianml.models.CategoryModel;
 import com.cristianml.models.ProductModel;
 import com.cristianml.persistence.impl.ProductDAOImpl;
-import com.cristianml.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -16,8 +14,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
