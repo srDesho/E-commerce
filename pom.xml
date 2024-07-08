@@ -125,6 +125,10 @@
 								<exclude>**/ECommerceApplication.class</exclude>
 								<exclude>**/models/**/*.class</exclude>
 								<exclude>**/controllers/**/*.class</exclude>
+								<!-- Exclude all subfolders from the security layer except the services subfolder. -->
+								<exclude>**/security/config/**/*.class</exclude>
+								<exclude>**/security/model/**/*.class</exclude>
+								<exclude>**/security/repository/**/*.class</exclude>
 							</excludes>
 						</configuration>
 					</execution>
