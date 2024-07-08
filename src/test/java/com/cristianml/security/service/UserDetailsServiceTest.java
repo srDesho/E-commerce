@@ -60,4 +60,12 @@ public class UserDetailsServiceTest {
         assertEquals(2, userDetails.getAuthorities().size());
     }
 
+    @Test
+    public void testLoadUserByUsername_UserDoesNotExists() {
+        when(this.userRepository.findUserModelByUsername(anyString())).thenReturn(Optional.empty());
+
+        assertThrows(UsernameNotFoundException.class, () -> {
+           this.userDetailsService.loadUserByUsername("user");
+        });
+    }
 }
