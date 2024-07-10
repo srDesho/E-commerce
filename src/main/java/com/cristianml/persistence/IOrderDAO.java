@@ -9,6 +9,8 @@ public interface IOrderDAO {
 
     void save(OrderModel order);
 
+    List<OrderModel> findAll();
+
     List<OrderModel> findOrdersByCurrentUser(UserModel currentUser);
 
 }

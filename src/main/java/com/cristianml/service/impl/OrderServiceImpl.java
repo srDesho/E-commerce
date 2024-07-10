@@ -33,6 +33,11 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public List<OrderModel> findAll() {
+        return this.orderDAO.findAll();
+    }
+
+    @Override
     public List<OrderModel> findOrdersByCurrentUser() {
         UserModel currentUser = this.userService.getCurrentUser();
         return this.orderDAO.findOrdersByCurrentUser(currentUser);

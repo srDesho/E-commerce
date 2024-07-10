@@ -23,6 +23,11 @@ public class OrderDAOImpl implements IOrderDAO {
     }
 
     @Override
+    public List<OrderModel> findAll() {
+        return (List<OrderModel>) this.orderRepository.findAll();
+    }
+
+    @Override
     public List<OrderModel> findOrdersByCurrentUser(UserModel currentUser) {
         return this.orderRepository.findAllOrderModelByUser(currentUser);
     }

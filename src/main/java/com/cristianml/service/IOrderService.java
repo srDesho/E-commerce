@@ -9,6 +9,7 @@ import java.util.List;
 public interface IOrderService {
 
     void save(OrderModel order);
+    List<OrderModel> findAll();
 
     List<OrderModel> findOrdersByCurrentUser();
 }

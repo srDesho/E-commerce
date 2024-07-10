@@ -3,9 +3,13 @@ package com.cristianml.controllers;
 import com.cristianml.controllers.dto.CategoryDTO;
 import com.cristianml.controllers.dto.ProductDTO;
 import com.cristianml.models.CategoryModel;
+import com.cristianml.models.OrderModel;
 import com.cristianml.models.ProductModel;
+import com.cristianml.security.model.UserModel;
 import com.cristianml.service.ICategoryService;
+import com.cristianml.service.IOrderService;
 import com.cristianml.service.IProductService;
+import com.cristianml.service.IUserService;
 import com.cristianml.utilities.Utilities;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,6 +45,12 @@ public class AdminController {
 
     @Autowired
     private IProductService productService;
+
+    @Autowired
+    private IOrderService orderService;
+
+    @Autowired
+    private IUserService userService;
 
     @GetMapping("/home")
     public String home() {
@@ -452,11 +463,18 @@ public class AdminController {
         return "redirect:/ecommerce/admin/product/view"; // This line of code cannot have any spaces.
     }
 
+    // =============================== View Orders ==============================
+    @GetMapping("/view-orders")
+    public String viewOrders(Model model) {
+        List<OrderModel> orderList = this.orderService.findAll();
+        model.addAttribute("orders", orderList);
+        return "/admin/view_orders";
+    }
+
     // GENERICS
     @ModelAttribute
     public void setGenerics(Model model) {
         model.addAttribute("categories", this.categoryService.listCategories());
         model.addAttribute("baseUrlUpload", this.baseUrlUpload);
     }
-
 }
