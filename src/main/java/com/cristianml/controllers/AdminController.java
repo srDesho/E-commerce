@@ -494,6 +494,13 @@ public class AdminController {
         return "redirect:/ecommerce/admin/user-details";
     }
 
+    @GetMapping("/admin-details")
+    public String adminDetails(Model model) {
+        List<UserModel> users = this.userService.findAll();
+        model.addAttribute("users", users);
+        return "/admin/admin";
+    }
+
     // GENERICS
     @ModelAttribute
     public void setGenerics(Model model) {
