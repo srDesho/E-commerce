@@ -450,14 +450,14 @@ public class AdminController {
             if (objImage.delete()) {
                 this.productService.deleteById(id);
                 flash.addFlashAttribute("clas", "success");
-                flash.addFlashAttribute("message", "Product  deleted succesfully.");
+                flash.addFlashAttribute("message", "Product  deleted successfully.");
             } else {
                 flash.addFlashAttribute("clas", "danger");
                 flash.addFlashAttribute("message", "Product could not be removed try again later");
             }
         } else {
             flash.addFlashAttribute("clas", "danger");
-            flash.addFlashAttribute("message", "Product could not be removed try again later");
+            flash.addFlashAttribute("message", "Product could not be removed try again later.");
         }
 
         return "redirect:/ecommerce/admin/product/view"; // This line of code cannot have any spaces.
@@ -477,6 +477,21 @@ public class AdminController {
         List<UserModel> users = this.userService.findAll();
         model.addAttribute("users", users);
         return "/admin/user_details";
+    }
+
+    @GetMapping("/delete_user/{id}")
+    public String deleteUser(@PathVariable(name = "id") Long id, Model model, RedirectAttributes flash) {
+        Optional<UserModel> userToDelete = this.userService.findById(id);
+
+        if (userToDelete.isEmpty()) {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "User could not be removed try again later");
+        } else {
+            userService.deleteById(id);
+            flash.addFlashAttribute("clas", "success");
+            flash.addFlashAttribute("message", "User deleted successfully");
+        }
+        return "redirect:/ecommerce/admin/user-details";
     }
 
     // GENERICS
