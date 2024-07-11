@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div>
+    <header th:insert="/layout/frontend :: admin-header"></header>
+</div>
+
+<section>
+    <section>
+        <div class="container-fluid mt-5 p-5">
+
+            <div class="card card-sh">
+
+                <div th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+                    <span th:text="${message}"></span>
+                    <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="card-body">
+                    </tr>
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user:${users}">
+                            <td th:text="${user.id}"></td>
+                            <td style="text-align: center;">
+                                <a th:href="${baseUrlUpload}+'producto/'+${user.profileImage}" class="fancybox">
+                                    <img th:src="${baseUrlUpload}+'producto/'+${user.profileImage}" width="70" height="70"/>
+                                </a>
+                            </td>
+                            <td th:text="${user.name}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.address}"></td>
+                            <td>
+                                <!-- Show delete alert if you are sure-->
+                                <a href="javascript:void(0);" th:onclick="'deleteRecord(\'/ecommerce/admin/delete_user/' + ${user.id} + '\')'">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</section>
+
+<div th:insert="/layout/frontend::scripts"></div>
+</body>
+</html>

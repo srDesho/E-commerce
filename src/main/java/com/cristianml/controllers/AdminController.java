@@ -471,6 +471,14 @@ public class AdminController {
         return "/admin/view_orders";
     }
 
+    // =============================== View Users =================================
+    @GetMapping("/user-details")
+    public String userDetails(Model model) {
+        List<UserModel> users = this.userService.findAll();
+        model.addAttribute("users", users);
+        return "/admin/user_details";
+    }
+
     // GENERICS
     @ModelAttribute
     public void setGenerics(Model model) {
