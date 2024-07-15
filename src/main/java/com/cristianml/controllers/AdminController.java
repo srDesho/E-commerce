@@ -475,7 +475,7 @@ public class AdminController {
     // =============================== View Users =================================
     @GetMapping("/user-details")
     public String userDetails(Model model) {
-        List<UserModel> users = this.userService.findAll();
+        List<UserModel> users = this.userService.findAllUsersByRole(RoleEnum.USER);
         model.addAttribute("users", users);
         return "/admin/user_details";
     }
