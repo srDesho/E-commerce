@@ -39,6 +39,8 @@ public class UserModel {
     private String profileImage;
     @NotNull(message = "cannot be empty")
     private String pincode;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @Column(name = "is_enable")
     private boolean isEnable;

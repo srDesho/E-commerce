@@ -5,6 +5,7 @@ import com.cristianml.controllers.dto.ProductDTO;
 import com.cristianml.models.CategoryModel;
 import com.cristianml.models.OrderModel;
 import com.cristianml.models.ProductModel;
+import com.cristianml.security.model.RoleEnum;
 import com.cristianml.security.model.UserModel;
 import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IOrderService;
@@ -496,7 +497,7 @@ public class AdminController {
 
     @GetMapping("/admin-details")
     public String adminDetails(Model model) {
-        List<UserModel> users = this.userService.findAll();
+        List<UserModel> users = this.userService.findAllUsersByRole(RoleEnum.ADMIN);
         model.addAttribute("users", users);
         return "/admin/admin";
     }

@@ -1,6 +1,7 @@
 package com.cristianml.service.impl;
 
 import com.cristianml.persistence.IUserDAO;
+import com.cristianml.security.model.RoleEnum;
 import com.cristianml.security.model.UserModel;
 import com.cristianml.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public List<UserModel> findAll() {
         return this.userDAO.findAll();
+    }
+
+    @Override
+    public List<UserModel> findAllUsersByRole(RoleEnum roleEnum) {
+        return this.userDAO.findAllUsersByRole(roleEnum);
     }
 
     @Override

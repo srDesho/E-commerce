@@ -3,6 +3,7 @@
 <head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
+</head>
 <body>
 
 <div>
@@ -50,7 +51,7 @@
                         <thead>
                         <tr>
                             <th>Full Name</th>
-                            <th>Mob No</th>
+                            <th>Phone Number</th>
                             <th>Email</th>
                             <th>Action</th>
                         </tr>
@@ -58,7 +59,7 @@
                         <tbody>
                         <tr th:each="user : ${users}">
                             <td th:text="${user.name}"></td>
-                            <td th:text="${user.pincode}"></td>
+                            <td th:text="${user.phoneNumber}"></td>
                             <td th:text="${user.username}"></td>
                             <td>
                                 <button class="btn btn-info btn-sm" type="button" th:onclick="'editUser(' + ${user.id} + ')'">Edit</button>

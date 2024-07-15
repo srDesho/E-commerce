@@ -1,6 +1,8 @@
 package com.cristianml.persistence.impl;
 
 import com.cristianml.persistence.IUserDAO;
+import com.cristianml.security.model.RoleEnum;
+import com.cristianml.security.model.RoleModel;
 import com.cristianml.security.model.UserModel;
 import com.cristianml.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,11 @@ public class UserDAOImpl implements IUserDAO {
     @Override
     public List<UserModel> findAll() {
         return (List<UserModel>) this.userRepository.findAll();
+    }
+
+    @Override
+    public List<UserModel> findAllUsersByRole(RoleEnum roleEnum) {
+        return this.userRepository.findAllByRoleList_RoleEnum(roleEnum);
     }
 
     @Override
