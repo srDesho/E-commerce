@@ -14,100 +14,74 @@
             </div>
             <div class="col-md-7 p-2">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-
                     <div class="card-body">
-                        <form action="/saveUser" enctype="multipart/form-data"
-                              method="post">
+                        <form name="form" th:object="${user}" th:action="@{/ecommerce/customer/register}" enctype="multipart/form-data" method="post">
                             <div class="row">
-                                <div class="col">
-                                    <label class="form-label">Full Name</label> <input required
-                                                                                       class="form-control" name="name" type="text">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" th:field="*{name}" id="name" required>
+                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('name')}" th:text="${errors.name}"></div>
                                 </div>
-
-                                <div class="col">
-                                    <label class="form-label">Mobile Number</label> <input
-                                        required class="form-control" name="mobileNumber"
-                                        type="number">
+                                <div class="col-md-6">
+                                    <label for="phoneNumber" class="form-label">Mobile Number</label>
+                                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" required>
+                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('phoneNumber')}" th:text="${errors.phoneNumber}"></div>
                                 </div>
-
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Email</label> <input required
-                                                                               class="form-control" name="email" type="email">
-                            </div>
-
-
-                            <div class="row">
-                                <div class="col">
-                                    <label class="form-label">Address</label> <input required
-                                                                                     class="form-control" name="address" type="text">
-                                </div>
-
-                                <div class="col">
-                                    <label class="form-label">City</label> <input required
-                                                                                  class="form-control" name="city" type="text">
-                                </div>
-
+                                <label for="username" class="form-label">Email</label>
+                                <input type="email" class="form-control" th:field="*{username}" id="username" required>
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('username')}" th:text="${errors.username}"></div>
                             </div>
 
                             <div class="row">
-                                <div class="col">
-                                    <label class="form-label">State</label> <input required
-                                                                                   class="form-control" name="state" type="text">
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" th:field="*{password}" id="password" required>
+                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('password')}" th:text="${errors.password}"></div>
                                 </div>
-
-                                <div class="col">
-                                    <label class="form-label">Pincode</label> <input required
-                                                                                     class="form-control" name="pincode" type="number">
+                                <div class="col-md-6">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" name="confirmPassword" class="form-control" id="confirm_password" required>
+                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('confirmPassword')}" th:text="${errors.confirmPassword}"></div>
                                 </div>
-
                             </div>
-
 
                             <div class="row">
-                                <div class="col">
-                                    <label class="form-label">Password</label> <input required
-                                                                                      class="form-control" name="password" type="password">
+                                <div class="col-md-12">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" th:field="*{address}" id="address">
+                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('address')}" th:text="${errors.address}"></div>
                                 </div>
-
-                                <div class="col">
-                                    <label class="form-label">Confirm Password</label> <input
-                                        required class="form-control" name="cpassword"
-                                        type="password">
-                                </div>
-
                             </div>
 
-
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="pincode" class="form-label">Pincode</label>
+                                    <input type="text" class="form-control" th:field="*{pincode}" id="pincode">
+                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('pincode')}" th:text="${errors.pincode}"></div>
+                                </div>
+                            </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Profile Image</label> <input
-                                    class="form-control" name="img" type="file">
+                                <label for="profileImage" class="form-label">Profile Image</label>
+                                <input type="file" class="form-control" th:field="*{profileImage}" id="profileImage">
                             </div>
 
-
-
-
-
-
-                            <button type="submit"
-                                    class="btn bg-primary text-white col-md-12">Register</button>
+                            <button type="submit" class="btn bg-primary text-white col-md-12">Register</button>
                         </form>
+
+
                     </div>
-
                     <div class="card-footer text-center">
-
-                        have an account ? <a href="@{/ecommerce/login}" class="text-decoration-none">Login
-                    </a>
+                        have an account ? <a href="@{/ecommerce/customer/login}" class="text-decoration-none">Login</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </section>
-
 <div th:insert="/layout/frontend :: scripts"></div>
 </body>
 </html>

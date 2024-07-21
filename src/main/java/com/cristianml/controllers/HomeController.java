@@ -1,5 +1,6 @@
 package com.cristianml.controllers;
 
+import com.cristianml.controllers.dto.UserDTO;
 import com.cristianml.models.ProductModel;
 import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IProductService;
@@ -73,7 +74,8 @@ public class HomeController {
     }
     // REGISTER
     @GetMapping("/register")
-    public String register() {
+    public String register(UserDTO userDTO, Model model) {
+        model.addAttribute("user", userDTO);
         return "/register";
     }
 
