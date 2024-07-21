@@ -41,13 +41,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void save(UserModel user) {
+    public UserModel save(UserModel user) {
         this.userDAO.save(user);
+        return user;
     }
 
     @Override
     public void deleteById(Long id) {
         this.userDAO.deleteById(id);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return this.userDAO.existsByUsername(username);
     }
 
     // Method for get the current user

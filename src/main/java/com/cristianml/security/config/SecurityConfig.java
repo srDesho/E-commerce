@@ -55,7 +55,7 @@ public class SecurityConfig {
                 })
                 .formLogin(form -> form
                         .loginPage("/ecommerce/admin/login")
-                        .loginProcessingUrl("/ecommerce/admin/login") // URL donde se procesa el login
+                        .loginProcessingUrl("/ecommerce/admin/login") // URL where login is processed.
                         .defaultSuccessUrl("/ecommerce/admin/home", true)
                         .permitAll()
                 ).logout(logout -> logout

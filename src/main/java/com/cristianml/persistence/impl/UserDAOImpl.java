@@ -2,7 +2,6 @@ package com.cristianml.persistence.impl;
 
 import com.cristianml.persistence.IUserDAO;
 import com.cristianml.security.model.RoleEnum;
-import com.cristianml.security.model.RoleModel;
 import com.cristianml.security.model.UserModel;
 import com.cristianml.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +42,17 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     @Override
-    public void save(UserModel user) {
-        this.userRepository.save(user);
+    public UserModel save(UserModel user) {
+        return this.userRepository.save(user);
     }
 
     @Override
     public void deleteById(Long id) {
         this.userRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return this.userRepository.existsByUsername(username);
     }
 }

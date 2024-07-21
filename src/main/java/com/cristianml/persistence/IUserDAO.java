@@ -17,9 +17,9 @@ public interface IUserDAO {
     Optional<UserModel> findByUsername(String username);
 
     UserModel createUser(UserModel user);
-    void save(UserModel user);
+    UserModel save(UserModel user);
 
     void deleteById(Long id);
 
-
+    boolean existsByUsername(String username);
 }

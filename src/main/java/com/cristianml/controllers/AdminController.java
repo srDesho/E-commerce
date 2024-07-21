@@ -2,15 +2,21 @@ package com.cristianml.controllers;
 
 import com.cristianml.controllers.dto.CategoryDTO;
 import com.cristianml.controllers.dto.ProductDTO;
+import com.cristianml.controllers.dto.UserDTO;
 import com.cristianml.models.CategoryModel;
 import com.cristianml.models.OrderModel;
 import com.cristianml.models.ProductModel;
+import com.cristianml.security.model.PermissionModel;
 import com.cristianml.security.model.RoleEnum;
+import com.cristianml.security.model.RoleModel;
 import com.cristianml.security.model.UserModel;
+import com.cristianml.security.repository.PermissionRepository;
+import com.cristianml.security.repository.RoleRepository;
 import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IOrderService;
 import com.cristianml.service.IProductService;
 import com.cristianml.service.IUserService;
+import com.cristianml.service.converter.UserConverter;
 import com.cristianml.utilities.Utilities;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +32,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/ecommerce/admin")
@@ -52,6 +56,15 @@ public class AdminController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private UserConverter userConverter;
 
     @GetMapping("/home")
     public String home() {
@@ -495,12 +508,83 @@ public class AdminController {
         return "redirect:/ecommerce/admin/user-details";
     }
 
+    // ADD ADMIN and VIEW ADMINS
     @GetMapping("/admin-details")
-    public String adminDetails(Model model) {
+    public String adminDetailsGet(UserDTO admin, Model model) {
         List<UserModel> users = this.userService.findAllUsersByRole(RoleEnum.ADMIN);
         model.addAttribute("users", users);
+        model.addAttribute("admin", admin);
         return "/admin/admin";
     }
+
+    @PostMapping("/admin-details")
+    public String adminDetailsPost(@Valid UserDTO userDTO, BindingResult result, Model model, RedirectAttributes flash) {
+        System.out.println("Inicio del método adminDetailsPost");
+
+        // Validate data
+        if (result.hasErrors()) {
+            System.out.println("Errores encontrados en la validación:");
+            result.getFieldErrors().forEach(err -> {
+                System.out.println("Campo: " + err.getField() + ", Mensaje: " + err.getDefaultMessage());
+            });
+
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors()
+                    .forEach(err -> {
+                        errors.put(err.getField(),
+                                "The field ".concat(err.getField()).concat(" ").concat(err.getDefaultMessage()));
+                    });
+
+            model.addAttribute("errors", errors);
+            model.addAttribute("admin", userDTO);
+            List<UserModel> users = this.userService.findAllUsersByRole(RoleEnum.ADMIN);
+            model.addAttribute("users", users);
+            System.out.println("Fin del método adminDetailsPost con errores en la validación");
+            return "/admin/admin";
+        }
+
+        System.out.println("Validación completada sin errores");
+
+        // Validate if the username already exists in the DB
+        if (this.userService.existsByUsername(userDTO.getUsername())) {
+            System.out.println("Usuario con el nombre de usuario ya existe.");
+            // throw new IllegalArgumentException("User with username " + userDTO.getUsername() + " already exists.");
+
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "This user name already exists in the database");
+            model.addAttribute("admin", userDTO);
+            List<UserModel> users = this.userService.findAllUsersByRole(RoleEnum.ADMIN);
+            model.addAttribute("users", users);
+            return "redirect:/ecommerce/admin/admin-details";
+        }
+
+        // Convert to Entity
+        UserModel userModel = userConverter.toEntity(userDTO);
+        userModel.setEnable(true);
+        userModel.setAccountNoExpired(true);
+        userModel.setAccountNoLocked(true);
+        userModel.setCredentialNoExpired(true);
+
+        Set<RoleModel> roleModelSet = this.roleRepository.findRoleEntitiesByRoleEnumIn(List.of("ADMIN"))
+                .stream().collect(Collectors.toSet());
+
+        // Asignar roles al usuario
+        userModel.setRoleList(roleModelSet);
+
+        // Guardar el usuario en la base de datos
+        UserModel savedUser = userService.save(userModel);
+        if (savedUser == null) {
+            throw new RuntimeException("Failed to save user.");
+        }
+
+        flash.addFlashAttribute("clas", "success");
+        flash.addFlashAttribute("message", "Admin created successfully.");
+        List<UserModel> users = this.userService.findAllUsersByRole(RoleEnum.ADMIN);
+        model.addAttribute("users", users);
+        System.out.println("Usuario guardado exitosamente.");
+        return "redirect:/ecommerce/admin/admin-details";
+    }
+
 
     // GENERICS
     @ModelAttribute

@@ -15,7 +15,9 @@ public interface IUserService {
 
     UserModel createUser(UserModel user);
 
-    void save(UserModel user);
+    UserModel save(UserModel user);
 
     void deleteById(Long id);
+
+    boolean existsByUsername(String username);
 }

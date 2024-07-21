@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PermissionRepository extends CrudRepository<PermissionModel, Long> {
     boolean existsByName(String name);
+    PermissionModel findByName(String name);
 }

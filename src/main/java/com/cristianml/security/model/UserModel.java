@@ -37,8 +37,11 @@ public class UserModel {
 
     @Column(name = "profile_image")
     private String profileImage;
-    @NotNull(message = "cannot be empty")
+
+    @Column(nullable = true)
     private String pincode;
+
+    @NotNull(message = "cannot be empty")
     @Column(name = "phone_number")
     private String phoneNumber;
 
