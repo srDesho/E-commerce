@@ -6,7 +6,6 @@ import com.cristianml.controllers.dto.UserDTO;
 import com.cristianml.models.CategoryModel;
 import com.cristianml.models.OrderModel;
 import com.cristianml.models.ProductModel;
-import com.cristianml.security.model.PermissionModel;
 import com.cristianml.security.model.RoleEnum;
 import com.cristianml.security.model.RoleModel;
 import com.cristianml.security.model.UserModel;
@@ -16,7 +15,7 @@ import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IOrderService;
 import com.cristianml.service.IProductService;
 import com.cristianml.service.IUserService;
-import com.cristianml.service.converter.UserConverter;
+import com.cristianml.service.converter.AdminConverter;
 import com.cristianml.utilities.Utilities;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,7 @@ public class AdminController {
     private RoleRepository roleRepository;
 
     @Autowired
-    private UserConverter userConverter;
+    private AdminConverter adminConverter;
 
     @GetMapping("/home")
     public String home() {
@@ -559,7 +558,7 @@ public class AdminController {
         }
 
         // Convert to Entity
-        UserModel userModel = userConverter.toEntity(userDTO);
+        UserModel userModel = adminConverter.toEntity(userDTO);
         userModel.setEnable(true);
         userModel.setAccountNoExpired(true);
         userModel.setAccountNoLocked(true);
