@@ -63,4 +63,19 @@ public class OrderDAOImplTest {
             assertEquals(1L, order.getUser().getId());
         }
     }
+
+    @Test
+    public void testFindAll() {
+        // Given
+        List<OrderModel> orderModelList = OrderDataProvider.listOrderMocks();
+
+        // When
+        when(this.orderRepository.findAll()).thenReturn(orderModelList);
+        List<OrderModel> result = this.orderDAO.findAll();
+
+        // Then
+        for (OrderModel order : result) {
+            assertEquals(1L, order.getUser().getId());
+        }
+    }
 }
