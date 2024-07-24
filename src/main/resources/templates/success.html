@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/frontend :: head(~{::title}, ~{::link})">
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+</head>
+<body>
+<h1>order Success</h1>
+<section>
+
+    <div th:insert="/layout/frontend :: main-header"></div>
+
+    <div class="container mt-5 p-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 text-center">
+                <i class="fa-solid fa-circle-check fa-5x text-success"></i>
+                <p class="fs-3">Product Ordered Successfully</p>
+                <p class="fs-4">Product will be delivered with in 7 days</p>
+                <div class="text-center">
+                    <a th:href="@{/ecommerce/customer/home}" class="btn btn-primary">Home</a>
+                    <a th:href="@{/ecommerce/customer/order/view}" class="btn btn-primary">Your Order</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<footer th:insert="/layout/frontend :: footer"></footer>
+<div th:insert="/layout/frontend :: scripts"></div>
+</body>
+</html>

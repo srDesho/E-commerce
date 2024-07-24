@@ -72,7 +72,13 @@ public class CartController {
     @PostMapping("/complete-order")
     public String completeOrder() {
         this.cartService.checkout();
-        return "redirect:/ecommerce/customer/cart/view";
+        return "redirect:/ecommerce/customer/cart/success";
+    }
+
+    // Pay success
+    @GetMapping("/success")
+    public String success() {
+        return "/success";
     }
 
     // Generics
