@@ -53,10 +53,9 @@
                             </td>
                             <td th:text="'$'+${#numbers.formatDecimal(item.quantity * item.product.discountPrice, 0, 'POINT', 0, 'POINT')}">Total</td>
                             <td>
-                                <form th:action="@{/ecommerce/customer/cart/update/{itemId}(itemId=${item.id})}" method="post">
-                                    <input type="hidden" name="quantity" value="0">
-                                    <button type="submit">Remove</button>
-                                </form>
+                                <a href="javascript:void(0);" th:onclick="'deleteRecord(\'/ecommerce/customer/cart/delete-item/' + ${item.id} + '\')'">
+                                    <i class="fas fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                         </tbody>

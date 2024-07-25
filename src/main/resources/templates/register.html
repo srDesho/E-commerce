@@ -13,15 +13,16 @@
                 <img alt="" src="/img/ecom.png" width="100%" height="400px">
             </div>
 
-            <div
-            th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
-                <span th:text="${message}"></span>
-                <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-
             <div class="col-md-7 p-2">
                 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
                     <div class="card-body">
+
+                        <div
+                                th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+                            <span th:text="${message}"></span>
+                            <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+
                         <form name="form" th:object="${user}" th:action="@{/ecommerce/customer/register}" enctype="multipart/form-data" method="post">
                             <div class="row">
                                 <div class="col-md-6">
