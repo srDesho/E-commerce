@@ -9,6 +9,7 @@ import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IProductService;
 import com.cristianml.service.IUserService;
 import com.cristianml.service.converter.UserConverter;
+import com.cristianml.service.impl.UserServiceImpl;
 import com.cristianml.utilities.Utilities;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ public class HomeController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     @GetMapping("/home")
     public String home() {
@@ -135,7 +139,7 @@ public class HomeController {
 
         // If the user charge a profile image
         if (!file.isEmpty()) {
-            imageName = Utilities.saveFile(file, this.path_upload.concat("profiles/"));
+            imageName = Utilities.saveFile(file, this.path_upload.concat("ecommerce/profiles/"));
 
             // Check the value of imageName
             if (imageName == "no") {
@@ -178,6 +182,20 @@ public class HomeController {
         return "redirect:/ecommerce/customer/register";
     }
 
+    // View Profile
+
+    @GetMapping("/view-profile/{id}")
+    public String viewProfile(@PathVariable("id") Long id, RedirectAttributes flash, Model model) {
+        Optional<UserModel> userOptional = this.userService.findById(id);
+        if (userOptional.isEmpty()) {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "User not found.");
+            return "redirect:/ecommerce/customer/view-profile/";
+        }
+        model.addAttribute("user", userOptional.get());
+        return "/view-profile";
+    }
+
     // SEE PRODUCT DETAILS
     @GetMapping("/product/{id}")
     public String viewProductDetails(@PathVariable("id") Integer id, Model model) {
@@ -204,5 +222,11 @@ public class HomeController {
     public void setGenerics(Model model){
         model.addAttribute("categories", this.categoryService.getActiveCategories(true));
         model.addAttribute("baseUrlUpload", this.baseUrlUpload);
+
+        // Get Id current User
+        if (userServiceImpl.isAuthenticated()) {
+            Long currentUserId = this.userServiceImpl.getCurrentUser().getId();
+            model.addAttribute("currentUserId", currentUserId);
+        }
     }
 }

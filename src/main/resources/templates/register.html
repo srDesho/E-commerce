@@ -4,72 +4,60 @@
     <link th:href="@{/css/style.css}" rel="stylesheet"/>
 </head>
 <body>
+
+<div>
+    <header th:insert="/layout/frontend :: main-header"></header>
+</div>
+
 <section>
-    <div th:replace="/layout/frontend :: main-header"></div>
-
-    <div class="container mt-5 p-5">
+    <div class="container-fluid mt-5 p-5 bg-light">
         <div class="row">
-            <div class="col-md-5 p-5">
-                <img alt="" src="/img/ecom.png" width="100%" height="400px">
-            </div>
+            <div class="col-md-10 offset-md-1 ">
 
-            <div class="col-md-7 p-2">
-                <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
-                    <div class="card-body">
+                <div th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
+                    <span th:text="${message}"></span>
+                    <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
 
-                        <div
-                                th:if="${message!=null}" th:class="'alert alert-' + ${clas} + ' alert-dismissible fade show'">
-                            <span th:text="${message}"></span>
-                            <button th:if="${message!=null}" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                <p class="fs-3 text-center">My Profile</p>
+                <hr>
+                <div class="text-center">
+                    <img alt="" th:src="${baseUrlUpload}+'ecommerce/profiles/'+${user.image}"
+                         class="border p-2"
+                         style="width: 110px; height: 110px; border-radius: 50%;">
+                </div>
 
-                        <form name="form" th:object="${user}" th:action="@{/ecommerce/customer/register}" enctype="multipart/form-data" method="post">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" th:field="*{name}" id="name" required>
-                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('name')}" th:text="${errors.name}"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="phoneNumber" class="form-label">Mobile Number</label>
-                                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" required>
-                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('phoneNumber')}" th:text="${errors.phoneNumber}"></div>
-                                </div>
+                <div class="col-md-8 offset-md-2 mt-4">
+                    <form th:object="${user}" th:action="@{/ecommerce/customer/update-profile}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" th:field="*{name}" id="name" required>
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('name')}" th:text="${errors.name}"></div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="phoneNumber" class="form-label">Mobile Number</label>
+                                <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" required>
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('phoneNumber')}" th:text="${errors.phoneNumber}"></div>
                             </div>
 
                             <div class="mb-3">
                                 <label for="username" class="form-label">Email</label>
-                                <input type="text" class="form-control" th:field="*{username}" id="username" required>
-                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('username')}" th:text="${errors.username}"></div>
+                                <input type="text" class="form-control" th:field="*{username}" id="username" readonly>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control" th:field="*{password}" id="password" required>
-                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('password')}" th:text="${errors.password}"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="confirm_password" class="form-label">Confirm Password</label>
-                                    <input type="password" name="confirm_password" class="form-control" id="confirm_password" required>
-                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('confirmPassword')}" th:text="${errors.confirmPassword}"></div>
-                                </div>
+                            <div class="col-md-12">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" th:field="*{address}" id="address">
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('address')}" th:text="${errors.address}"></div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" class="form-control" th:field="*{address}" id="address">
-                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('address')}" th:text="${errors.address}"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label for="pincode" class="form-label">Pincode</label>
-                                    <input type="text" class="form-control" th:field="*{pincode}" id="pincode">
-                                    <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('pincode')}" th:text="${errors.pincode}"></div>
-                                </div>
+                            <div class="col-md-12">
+                                <label for="pincode" class="form-label">Pincode</label>
+                                <input type="text" class="form-control" th:field="*{pincode}" id="pincode">
+                                <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('pincode')}" th:text="${errors.pincode}"></div>
                             </div>
 
                             <div class="mb-3">
@@ -77,19 +65,41 @@
                                 <input type="file" class="form-control" name="image" id="image">
                             </div>
 
-                            <a href="javascript:void(0);" class="btn btn-primary col-md-12" onclick="document.form.submit();">Register</a>
+                            <button type="submit" class="btn btn-primary col-md-12">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="col-md-10 offset-md-1 mt-1">
+                <div class="row">
+                    <p class="text-center fs-3">Change Password</p>
+                    <div class="col-md-6 offset-md-3">
+                        <form th:action="@{/ecommerce/customer/change-password}" method="post">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="current_password" class="form-label">Current Password</label>
+                                    <input type="password" class="form-control" name="current_password" id="current_password" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="new_password" class="form-label">New Password</label>
+                                    <input type="password" name="new_password" class="form-control" id="new_password" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" name="confirm_password" class="form-control" id="confirm_password" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary col-md-12">Change</button>
                         </form>
-
-
-                    </div>
-                    <div class="card-footer text-center">
-                        have an account ? <a href="@{/ecommerce/customer/login}" class="text-decoration-none">Login</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 <div th:insert="/layout/frontend :: scripts"></div>
 </body>
 </html>

@@ -82,7 +82,7 @@
                                 Orders
                             </a>
                         </li>
-                        <!-- Visible Dropdown only when is autheticated -->
+                        <!-- Visible Dropdown only when is authenticated -->
                         <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                aria-expanded="false">
@@ -91,6 +91,9 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="javascript:void(0);"
                                        onclick="document.getElementById('logoutForm').submit();">Logout</a></li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{'/ecommerce/customer/view-profile/'+${currentUserId}}">Edit Profile</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
