@@ -29,24 +29,24 @@
                                      style="width: 110px; height: 110px; border-radius: 50%;">
                             </div>
 
-                            <form th:object="${user}" th:action="@{/ecommerce/customer/update-profile}" method="post"
+                            <form name="form" th:object="${user}" th:action="@{'/ecommerce/customer/update-profile/'+${id}}" method="post"
                                   enctype="multipart/form-data">
 
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" th:field="*{name}" id="name" required>
+                                    <input type="text" class="form-control" th:field="*{name}" id="name">
                                     <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('name')}" th:text="${errors.name}"></div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="phoneNumber" class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" required>
+                                    <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber">
                                     <div class="alert alert-danger" th:if="${errors != null && errors.containsKey('phoneNumber')}" th:text="${errors.phoneNumber}"></div>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="username" class="form-label">Email</label>
-                                    <input type="text" class="form-control" th:field="*{username}" id="username" readonly>
+                                    <input type="text" class="form-control disabled-field" th:field="*{username}" id="username" disabled>
                                 </div>
 
                                 <div class="mb-3">

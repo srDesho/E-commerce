@@ -1,6 +1,7 @@
 package com.cristianml.controllers;
 
 import com.cristianml.controllers.dto.UserDTO;
+import com.cristianml.controllers.dto.UserUpdateDTO;
 import com.cristianml.models.ProductModel;
 import com.cristianml.security.model.RoleModel;
 import com.cristianml.security.model.UserModel;
@@ -15,6 +16,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -183,7 +185,6 @@ public class HomeController {
     }
 
     // View Profile
-
     @GetMapping("/view-profile/{id}")
     public String viewProfile(@PathVariable("id") Long id, RedirectAttributes flash, Model model) {
         Optional<UserModel> userOptional = this.userService.findById(id);
@@ -193,8 +194,74 @@ public class HomeController {
             return "redirect:/ecommerce/customer/view-profile/";
         }
         model.addAttribute("user", userOptional.get());
-        return "/view-profile";
+        return "view_profile";
     }
+
+    // Update profile
+    @PostMapping("/update-profile/{id}")
+    public String updateProfile(@Valid @ModelAttribute("user") UserUpdateDTO userDTO, BindingResult result, @RequestParam("image") MultipartFile file,
+                                RedirectAttributes flash, @PathVariable("id") Long id, Model model) {
+        // Validate data
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(err -> {
+                errors.put(err.getField(), "The field ".concat(err.getField()).concat(" ").concat(err.getDefaultMessage()));
+            });
+
+            flash.addFlashAttribute("errors", errors);
+            model.addAttribute("user", userDTO);
+            return "redirect:/ecommerce/customer/view-profile/" + id;
+        }
+
+        String imageName = "default.png";
+        userDTO.setProfileImage(imageName);
+
+        // Validate image file
+        if (!file.isEmpty()) {
+            imageName = Utilities.saveFile(file, this.path_upload + "/ecommerce/profiles/");
+
+            if (imageName.equals("no")) {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "The image file is not valid, it must be JPG|JPEG|PNG");
+                flash.addFlashAttribute("user", userDTO);
+                return "redirect:/ecommerce/customer/view-profile/" + id;
+            }
+
+            if (imageName != null) {
+                userDTO.setProfileImage(imageName);
+            } else {
+                flash.addFlashAttribute("clas", "danger");
+                flash.addFlashAttribute("message", "The image file is NULL");
+                flash.addFlashAttribute("user", userDTO);
+                return "redirect:/ecommerce/customer/view-profile/" + id;
+            }
+        }
+
+        // Set attributes
+        Optional<UserModel> optionalUserModel = this.userService.findById(id);
+
+        if (optionalUserModel.isEmpty()) {
+            flash.addFlashAttribute("clas", "danger");
+            flash.addFlashAttribute("message", "User not found or not exists.");
+            flash.addFlashAttribute("user", userDTO);
+            return "redirect:/ecommerce/customer/view-profile/" + id;
+        }
+
+        UserModel userModel = optionalUserModel.get();
+        userModel.setName(userDTO.getName());
+        userModel.setPhoneNumber(userDTO.getPhoneNumber());
+        userModel.setAddress(userDTO.getAddress());
+        userModel.setPincode(userDTO.getPincode());
+        userModel.setPhoneNumber(userDTO.getPhoneNumber());
+        userModel.setProfileImage(userDTO.getProfileImage());
+
+        this.userService.save(userModel);
+        flash.addFlashAttribute("clas", "success");
+        flash.addFlashAttribute("message", "User update successfully.");
+
+        return "redirect:/ecommerce/customer/view-profile/" + id;
+    }
+
 
     // SEE PRODUCT DETAILS
     @GetMapping("/product/{id}")
@@ -205,7 +272,7 @@ public class HomeController {
            model.addAttribute("product", product);
         }
 
-        return "/view_product";
+        return "view_product";
     }
 
     // VIEW PRODUCTS

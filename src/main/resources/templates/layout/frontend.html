@@ -46,7 +46,7 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <!-- Visible Items only when isn't autheticated -->
+                        <!-- Visible Items only when isn't authenticated -->
                         <li sec:authorize="!isAuthenticated()" class="nav-item">
                             <a class="nav-link active" aria-current="page" th:href="@{/ecommerce/customer/loginRedirect(type='user')}">
                                 <i class="fa-solid fa-right-to-bracket"></i> LOGIN
