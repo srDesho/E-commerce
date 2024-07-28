@@ -77,6 +77,7 @@
                             <hr>
                             <div class="col-md-12">
                                 <form th:action="@{/ecommerce/customer/change-password}" method="post">
+                                    <div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
                                     <div class="mb-3">
                                         <label for="current_password" class="form-label">Current Password</label>
                                         <input type="password" class="form-control" name="current_password" id="current_password" required>
@@ -91,7 +92,6 @@
                                         <label for="confirm_password" class="form-label">Confirm Password</label>
                                         <input type="password" name="confirm_password" class="form-control" id="confirm_password" required>
                                     </div>
-
                                     <button type="submit" class="btn btn-primary col-md-12">Change</button>
                                 </form>
                             </div>

@@ -15,6 +15,7 @@ import com.cristianml.utilities.Utilities;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -54,6 +55,9 @@ public class HomeController {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/home")
     public String home() {
@@ -262,6 +266,38 @@ public class HomeController {
         return "redirect:/ecommerce/customer/view-profile/" + id;
     }
 
+    // Change password
+    @PostMapping("/change-password")
+    public String changePassword(@RequestParam(name = "current_password") String currentPassword,
+                                 @RequestParam("new_password") String newPassword,
+                                 @RequestParam("confirm_password") String confirmPassword, Model model,
+                                 RedirectAttributes flash) {
+
+        UserModel currentUser = this.userServiceImpl.getCurrentUser();
+        System.out.println(" +++++++++++++++++++++++++ " + currentUser.getPassword() + currentUser.getName());
+        boolean matches = this.passwordEncoder.matches(currentPassword, currentUser.getPassword());
+
+        if (!matches) {
+            flash.addFlashAttribute("error", "Current password is incorrect.");
+            return "redirect:/ecommerce/customer/view-profile/" + currentUser.getId();
+        }
+
+        if (!newPassword.equals(confirmPassword)) {
+            flash.addFlashAttribute("error", "Passwords do not match.");
+            return "redirect:/ecommerce/customer/view-profile/" + currentUser.getId();
+        }
+
+        if (newPassword.isBlank()) {
+            flash.addFlashAttribute("error", "Password cannot be blank.");
+            return "redirect:/ecommerce/customer/view-profile/" + currentUser.getId();
+        }
+
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+        this.userService.save(currentUser);
+        flash.addFlashAttribute("clas", "success");
+        flash.addFlashAttribute("message", "Password changed successfully!");
+        return "redirect:/ecommerce/customer/view-profile/" + currentUser.getId();
+    }
 
     // SEE PRODUCT DETAILS
     @GetMapping("/product/{id}")
