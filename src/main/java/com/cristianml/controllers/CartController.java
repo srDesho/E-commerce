@@ -26,6 +26,9 @@ public class CartController {
     @Value("${cristian.values.base_url_upload}")
     private String baseUrlUpload;
 
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
     private final UserServiceImpl userService;
     private final CartServiceImpl cartService;
     private final OrderServiceImpl orderService;
@@ -114,5 +117,11 @@ public class CartController {
         model.addAttribute("baseUrlUpload", this.baseUrlUpload);
         model.addAttribute("userAddress", this.userService.getCurrentUser().getAddress());
         model.addAttribute("categories", this.categoryService.getActiveCategories(true));
+
+        // Get Id current User
+        if (userServiceImpl.isAuthenticated()) {
+            Long currentUserId = this.userServiceImpl.getCurrentUser().getId();
+            model.addAttribute("currentUserId", currentUserId);
+        }
     }
 }
