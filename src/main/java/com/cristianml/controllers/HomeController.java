@@ -2,10 +2,12 @@ package com.cristianml.controllers;
 
 import com.cristianml.controllers.dto.UserDTO;
 import com.cristianml.controllers.dto.UserUpdateDTO;
+import com.cristianml.models.CartItemModel;
 import com.cristianml.models.ProductModel;
 import com.cristianml.security.model.RoleModel;
 import com.cristianml.security.model.UserModel;
 import com.cristianml.security.repository.RoleRepository;
+import com.cristianml.service.ICartService;
 import com.cristianml.service.ICategoryService;
 import com.cristianml.service.IProductService;
 import com.cristianml.service.IUserService;
@@ -58,6 +60,9 @@ public class HomeController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ICartService cartService;
 
     @GetMapping("/home")
     public String home() {
@@ -330,6 +335,7 @@ public class HomeController {
         if (userServiceImpl.isAuthenticated()) {
             Long currentUserId = this.userServiceImpl.getCurrentUser().getId();
             model.addAttribute("currentUserId", currentUserId);
+            model.addAttribute("quantityItems", this.cartService.countQuantityItems());
         }
     }
 }

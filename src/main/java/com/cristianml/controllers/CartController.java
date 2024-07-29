@@ -122,6 +122,7 @@ public class CartController {
         if (userServiceImpl.isAuthenticated()) {
             Long currentUserId = this.userServiceImpl.getCurrentUser().getId();
             model.addAttribute("currentUserId", currentUserId);
+            model.addAttribute("quantityItems", this.cartService.countQuantityItems());
         }
     }
 }

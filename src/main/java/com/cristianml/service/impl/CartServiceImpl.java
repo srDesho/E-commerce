@@ -45,6 +45,16 @@ public class CartServiceImpl implements ICartService {
         return this.cartDAO.findCartByUser(currentUser);
     }
 
+    @Override
+    public int countQuantityItems() {
+        return this.userService.getCurrentUser()
+                .getCart()
+                .getCartItems()
+                .stream()
+                .mapToInt(CartItemModel::getQuantity)
+                .sum();
+    }
+
     public CartModel getCartByCurrentUser() {
         UserModel currentUser = this.userService.getCurrentUser();
         return this.findCartByUser(currentUser)

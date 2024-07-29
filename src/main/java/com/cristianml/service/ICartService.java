@@ -10,5 +10,5 @@ public interface ICartService {
     void save(CartModel cart);
 
     Optional<CartModel> findCartByUser(UserModel currentUser);
-
+    int countQuantityItems();
 }

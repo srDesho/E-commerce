@@ -68,10 +68,8 @@
                             <a class="nav-link active" aria-current="page" th:href="@{/ecommerce/customer/cart/view}">
                                 <i class="fa-solid fa-shopping-cart"></i> Cart
                                 <!-- Show the item count here dynamically -->
-                                <span class="badge bg-secondary">
-                                    <!-- Assuming you have a method to get cart item count -->
-                                    <!-- Replace with your logic to fetch the actual count -->
-                                    5 <!-- Example: Replace with dynamic count -->
+                                <span class="badge bg-secondary"
+                                th:text="${quantityItems}">
                                 </span>
                             </a>
                         </li>
