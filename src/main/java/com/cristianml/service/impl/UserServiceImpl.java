@@ -57,27 +57,33 @@ public class UserServiceImpl implements IUserService {
         return this.userDAO.existsByUsername(username);
     }
 
-    // Method for get the current user
+    // Custom exception for unauthenticated access
+    public class UnauthenticatedUserException extends RuntimeException {
+        public UnauthenticatedUserException(String message) {
+            super(message);
+        }
+    }
+
+    // Method for getting the current user
     public UserModel getCurrentUser() {
-        String username = getCurrentUsername(); // We call the method created below to get current username
-        Optional<UserModel> userOptional = userDAO.findByUsername(username);
-        return userOptional.orElseThrow(() -> new RuntimeException("User not found"));
+        String username = getCurrentUsername(); // Get the username of the currently authenticated user
+        Optional<UserModel> userOptional = userDAO.findByUsername(username); // Find the user by username in the database
+        return userOptional.orElseThrow(() -> new RuntimeException("User not found")); // Throw exception if user not found
     }
 
     // Method to get the username of the current user
     public String getCurrentUsername() {
         // The Principal object stores the authenticated user's details
-        // SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // This method return the object Principal
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Retrieve the principal object
 
-        // Check if the principal object exists
+        // Check if the principal object exists and is an instance of UserDetails
         if (principal instanceof UserDetails) {
-            // Retrieve(recuperar) the username from UserDetails interface
+            // Retrieve the username from UserDetails interface
             return ((UserDetails) principal).getUsername();
         } else {
             // If the principal object is not an instance of UserDetails,
             // it might be empty or represent an anonymous user
-            return principal.toString();
+            throw new UnauthenticatedUserException("User not authenticated"); // Throw custom exception for unauthenticated access
         }
     }
 
