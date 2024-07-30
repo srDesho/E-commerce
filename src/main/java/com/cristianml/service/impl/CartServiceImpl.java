@@ -47,7 +47,14 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public int countQuantityItems() {
-        return this.userService.getCurrentUser()
+
+        UserModel userModel = this.userService.getCurrentUser();
+        // Create empty cart if the user doesn't have one.
+        if (userModel.getCart() == null) {
+            userModel.setCart(new CartModel());
+        }
+
+        return userModel
                 .getCart()
                 .getCartItems()
                 .stream()
