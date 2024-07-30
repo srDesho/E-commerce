@@ -87,11 +87,11 @@
                                 <span sec:authentication="name"></span> <!-- Muestra el nombre de usuario -->
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="javascript:void(0);"
-                                       onclick="document.getElementById('logoutForm').submit();">Logout</a></li>
                                 <li>
                                     <a class="dropdown-item" th:href="@{'/ecommerce/customer/view-profile/'+${currentUserId}}">Edit Profile</a>
                                 </li>
+                                <li><a class="dropdown-item" href="javascript:void(0);"
+                                       onclick="document.getElementById('logoutForm').submit();">Logout</a></li>
                             </ul>
                         </li>
                     </ul>

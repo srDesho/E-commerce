@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 import java.io.File;
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -546,7 +545,7 @@ public class AdminController {
 
         // Validate if the username already exists in the DB
         if (this.userService.existsByUsername(userDTO.getUsername())) {
-            System.out.println("Usuario con el nombre de usuario ya existe.");
+            System.out.println("This user name already exists in the database");
             // throw new IllegalArgumentException("User with username " + userDTO.getUsername() + " already exists.");
 
             flash.addFlashAttribute("clas", "danger");

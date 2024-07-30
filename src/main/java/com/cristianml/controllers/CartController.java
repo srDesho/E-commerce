@@ -2,10 +2,7 @@ package com.cristianml.controllers;
 
 import com.cristianml.models.CartItemModel;
 import com.cristianml.models.CartModel;
-import com.cristianml.persistence.ICartDAO;
-import com.cristianml.persistence.ICartItemDAO;
 import com.cristianml.persistence.ICategoryDAO;
-import com.cristianml.persistence.impl.CartDAOImpl;
 import com.cristianml.service.ICartItemService;
 import com.cristianml.service.impl.CartServiceImpl;
 import com.cristianml.service.impl.OrderServiceImpl;
@@ -33,15 +30,15 @@ public class CartController {
     private final CartServiceImpl cartService;
     private final OrderServiceImpl orderService;
     private final ICategoryDAO categoryService;
-    private final ICartItemDAO iCartItemDAO;
+    private final ICartItemService cartItemService;
 
     public CartController(UserServiceImpl userService, CartServiceImpl cartService, OrderServiceImpl orderService,
-                          ICategoryDAO categoryService, ICartItemDAO iCartItemDAO) {
+                          ICategoryDAO categoryService, ICartItemService cartItemService) {
         this.userService = userService;
         this.cartService = cartService;
         this.orderService = orderService;
         this.categoryService = categoryService;
-        this.iCartItemDAO = iCartItemDAO;
+        this.cartItemService = cartItemService;
     }
 
 
@@ -96,16 +93,21 @@ public class CartController {
     @GetMapping("/delete-item/{itemId}")
     public String deleteItem(@PathVariable("itemId") Long itemId, Model model, RedirectAttributes flash) {
        // Get the item
-        Optional<CartItemModel> cartItemDAO = this.iCartItemDAO.findCartItemModelById(itemId);
+        Optional<CartItemModel> cartItem = this.cartItemService.findCartItemModelById(itemId);
+        System.out.println( "0000000000000000000000000000000000000000" + cartItem);
 
         // Verify if exists
-        if (cartItemDAO.isEmpty()) {
+        if (cartItem.isEmpty()) {
             flash.addFlashAttribute("clas", "danger");
             flash.addFlashAttribute("message", "Item could not be removed try again later");
+            System.out.println("------------------------DONT DELETE-----------------------------------");
         } else {
-            this.iCartItemDAO.deleteById(itemId);
+            System.out.println("Item found: " + cartItem.get());
+            this.cartItemService.deleteById(cartItem.get().getId());
+            System.out.println("Item deleted with ID: " + cartItem.get().getId());
             flash.addFlashAttribute("clas", "success");
             flash.addFlashAttribute("message", "Item deleted successfully");
+            System.out.println("-----------------------DELETE----------------------------------------------");
         }
 
         return "redirect:/ecommerce/customer/cart/view";
@@ -117,12 +119,5 @@ public class CartController {
         model.addAttribute("baseUrlUpload", this.baseUrlUpload);
         model.addAttribute("userAddress", this.userService.getCurrentUser().getAddress());
         model.addAttribute("categories", this.categoryService.getActiveCategories(true));
-
-        // Get Id current User
-        if (userServiceImpl.isAuthenticated()) {
-            Long currentUserId = this.userServiceImpl.getCurrentUser().getId();
-            model.addAttribute("currentUserId", currentUserId);
-            model.addAttribute("quantityItems", this.cartService.countQuantityItems());
-        }
     }
 }

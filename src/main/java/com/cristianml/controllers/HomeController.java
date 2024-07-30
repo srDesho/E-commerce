@@ -2,7 +2,6 @@ package com.cristianml.controllers;
 
 import com.cristianml.controllers.dto.UserDTO;
 import com.cristianml.controllers.dto.UserUpdateDTO;
-import com.cristianml.models.CartItemModel;
 import com.cristianml.models.ProductModel;
 import com.cristianml.security.model.RoleModel;
 import com.cristianml.security.model.UserModel;
@@ -19,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -330,12 +328,5 @@ public class HomeController {
     public void setGenerics(Model model){
         model.addAttribute("categories", this.categoryService.getActiveCategories(true));
         model.addAttribute("baseUrlUpload", this.baseUrlUpload);
-
-        // Get Id current User
-        if (userServiceImpl.isAuthenticated()) {
-            Long currentUserId = this.userServiceImpl.getCurrentUser().getId();
-            model.addAttribute("currentUserId", currentUserId);
-            model.addAttribute("quantityItems", this.cartService.countQuantityItems());
-        }
     }
 }
